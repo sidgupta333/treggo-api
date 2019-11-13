@@ -38,7 +38,7 @@ public class UserController {
 	@Autowired
 	UsersRepository repo;
 	
-	
+	@CrossOrigin
 	@ApiOperation(value="Creates a new user of the system")
 	@PostMapping("/create") 
 	public ResponseEntity<?> createUser(@RequestBody CreateUser request) {
