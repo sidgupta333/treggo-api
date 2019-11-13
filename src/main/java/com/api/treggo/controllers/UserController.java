@@ -27,6 +27,7 @@ import com.api.treggo.services.UsersService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/users")
 public class UserController {
 
@@ -39,7 +40,7 @@ public class UserController {
 	@Autowired
 	UsersRepository repo;
 	
-	@CrossOrigin
+
 	@ApiOperation(value="Creates a new user of the system")
 	@PostMapping("/create") 
 	public ResponseEntity<?> createUser(@RequestBody CreateUser request) {
