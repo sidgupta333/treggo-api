@@ -26,8 +26,9 @@ import com.api.treggo.services.UsersService;
 
 import io.swagger.annotations.ApiOperation;
 
+//Rest Controller
 @RestController
-@CrossOrigin
+@CrossOrigin 
 @RequestMapping("/users")
 public class UserController {
 
