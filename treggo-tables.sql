@@ -17,6 +17,13 @@ CREATE TABLE Customers(
    created_on TIMESTAMP NOT NULL
 );
 
+CREATE TABLE IMG_MASTER(
+  img_id serial PRIMARY KEY,
+  img_path VARCHAR(1000),
+  file_extension VARCHAR(6),
+  img_data BYTEA
+)
+
 CREATE TABLE DISH_CATEGORY(
   category_id serial PRIMARY KEY,
   category_name VARCHAR(50) NOT NULL,
@@ -29,10 +36,12 @@ CREATE TABLE DISH(
   dish_name VARCHAR(50) NOT NULL,
   base_price INTEGER,
   is_available VARCHAR(1),
-  img_data BYTEA,
+  img_id INTEGER,
   created_on TIMESTAMP NOT NULL,
-  FOREIGN KEY (category_id) REFERENCES DISH_CATEGORY(category_id)
+  FOREIGN KEY (category_id) REFERENCES DISH_CATEGORY(category_id),
+  FOREIGN KEY (img_id) REFERENCES IMG_MASTER(img_id)
 );
+
 
 
 CREATE TABLE ORDERS(
@@ -62,11 +71,12 @@ CREATE TABLE SUB_ORDERS(
 
 CREATE TABLE BANNER_MASTER(
   banner_id serial PRIMARY KEY,
-  img_data BYTEA,
+  img_id INTEGER,
   is_available VARCHAR(1),
   start_date DATE,
   end_date DATE,
-  created_on TIMESTAMP NOT NULL
+  created_on TIMESTAMP NOT NULL,
+  FOREIGN KEY (img_id) REFERENCES IMG_MASTER(img_id)
 );
 
 
