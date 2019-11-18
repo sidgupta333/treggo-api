@@ -11,8 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.api.treggo.enums.YesNo;
@@ -38,9 +38,9 @@ public class Dish {
 	@Enumerated(EnumType.STRING)
 	private YesNo is_available;
 
-	@Lob
-	@Column
-	private byte[] img_data;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "img_id")
+	private ImgMaster img;
 
 	@Column(nullable = false)
 	private LocalDate created_on;
@@ -51,14 +51,13 @@ public class Dish {
 	}
 
 	public Dish(Long dish_id, DishCategory category_id, String dish_name, Long base_price, YesNo is_available,
-			byte[] img_data, LocalDate created_on) {
+			LocalDate created_on) {
 		super();
 		this.dish_id = dish_id;
 		this.category_id = category_id;
 		this.dish_name = dish_name;
 		this.base_price = base_price;
 		this.is_available = is_available;
-		this.img_data = img_data;
 		this.created_on = created_on;
 	}
 
@@ -102,12 +101,14 @@ public class Dish {
 		this.is_available = is_available;
 	}
 
-	public byte[] getImg_data() {
-		return img_data;
+	
+
+	public ImgMaster getImg() {
+		return img;
 	}
 
-	public void setImg_data(byte[] img_data) {
-		this.img_data = img_data;
+	public void setImg(ImgMaster img) {
+		this.img = img;
 	}
 
 	public LocalDate getCreated_on() {

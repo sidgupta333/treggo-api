@@ -21,7 +21,8 @@ CREATE TABLE IMG_MASTER(
   img_id serial PRIMARY KEY,
   img_path VARCHAR(1000),
   file_extension VARCHAR(6),
-  img_data BYTEA
+  img_data BYTEA,
+  created_on TIMESTAMP NOT NULL
 )
 
 CREATE TABLE DISH_CATEGORY(

@@ -169,7 +169,6 @@ public class DishesService {
 
 		try {
 			dish = dishRepo.fetchByID(dishId);
-			dish.setImg_data(img);
 			dishRepo.save(dish);
 		}
 
