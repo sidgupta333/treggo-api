@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.api.treggo.entities.Dish;
 import com.api.treggo.entities.DishCategory;
 import com.api.treggo.entities.ImgMaster;
+import com.api.treggo.enums.YesNo;
 import com.api.treggo.repositories.DishCategoryRepository;
 import com.api.treggo.repositories.DishRepository;
 import com.api.treggo.repositories.ImgMasterRepository;
@@ -182,6 +183,33 @@ public class DishesService {
 		return dish;
 	}
 
+	
+	// Update dish availability status:
+	public Dish updateStatusDish(Long dishId, String status) {
+
+		Dish dish = null;
+
+		try {
+			dish = dishRepo.fetchByID(dishId);
+			if(status.equalsIgnoreCase("Y")) {
+				dish.setIs_available(YesNo.Y);
+			}
+			else {
+				dish.setIs_available(YesNo.N);
+			}
+			
+			dishRepo.save(dish);
+		}
+
+		catch (Exception e) {
+			return null;
+		}
+
+		return dish;
+	}
+	
+	
+	
 	// Update dish image of existing dish
 	public Dish updateImageDish(Long dishId, byte[] img) {
 		Dish dish = null;

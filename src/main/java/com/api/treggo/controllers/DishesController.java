@@ -18,6 +18,7 @@ import com.api.treggo.entities.Dish;
 import com.api.treggo.entities.DishCategory;
 import com.api.treggo.requests.NewDishDTO;
 import com.api.treggo.requests.UpdateCategoryDTO;
+import com.api.treggo.requests.UpdateDIshStatusDTO;
 import com.api.treggo.requests.UpdateImgDTO;
 import com.api.treggo.requests.UpdatePriceDTO;
 import com.api.treggo.responses.AllDishesResponse;
@@ -169,6 +170,18 @@ public class DishesController {
 		return ResponseEntity.ok(d);
 	}
 	
+	
+	@ApiOperation(value="Update status of existing Dish")
+	@PostMapping("/updateDish/status")
+	public ResponseEntity<?> updateStatus(@RequestBody UpdateDIshStatusDTO dto) {
+		
+		Dish d = dishesService.updateStatusDish(dto.getDish_Id(), dto.getStatus());
+		if(d == null) {
+			return ResponseEntity.status(500).body(new GeneralResponse("failure"));
+		}
+		
+		return ResponseEntity.ok(d);
+	}
 	
 	
 	@ApiOperation(value="Update Image of existing Dish")
