@@ -59,7 +59,10 @@ public class UsersService {
 			userToSave.setPassword(pwd.encrypt(req.getPassword()));
 			userToSave.setUsername(req.getUsername());
 			userToSave.setCreated_on(LocalDate.now());
-						
+			
+			if(req.getUser_id() != null) {
+				userToSave.setUser_id(req.getUser_id());
+			}
 			
 			try {
 
