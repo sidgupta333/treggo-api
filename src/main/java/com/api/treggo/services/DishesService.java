@@ -26,7 +26,7 @@ public class DishesService {
 
 	@Autowired
 	private DishRepository dishRepo;
-	
+
 	@Autowired
 	private ImgMasterRepository imgRepo;
 
@@ -104,13 +104,28 @@ public class DishesService {
 	public Dish createDish(NewDishDTO req) {
 
 		Dish dish = new Dish();
+
 		BeanUtils.copyProperties(req, dish);
-		
+
 		DishCategory category = categoryRepo.fetchByCategoryID(req.getCategory_id());
-		ImgMaster img = imgRepo.fetchByImgID(req.getImg_id());
-		
 		dish.setCategory(category);
-		dish.setImg(img);
+		
+		if (req.getDish_id() == null) {
+			ImgMaster img = imgRepo.fetchByImgID(req.getImg_id());
+			dish.setImg(img);
+		}
+		
+		else {
+
+			Dish dish2 = dishRepo.fetchByID(req.getDish_id());
+			if (req.getImg_id() != null) {
+				ImgMaster img = imgRepo.fetchByImgID(req.getImg_id());
+				dish.setImg(img);
+			} else {
+				dish.setImg(dish2.getImg());
+			}
+		}
+
 		
 		dish.setCreated_on(LocalDate.now());
 
@@ -153,8 +168,8 @@ public class DishesService {
 			Dish dish = dishRepo.fetchByID(id);
 			ImgMaster img = dish.getImg();
 			dishRepo.deleteById(id);
-			
-			//Remove image for the selected dish
+
+			// Remove image for the selected dish
 			imgRepo.delete(img);
 		}
 
@@ -183,7 +198,6 @@ public class DishesService {
 		return dish;
 	}
 
-	
 	// Update dish availability status:
 	public Dish updateStatusDish(Long dishId, String status) {
 
@@ -191,13 +205,12 @@ public class DishesService {
 
 		try {
 			dish = dishRepo.fetchByID(dishId);
-			if(status.equalsIgnoreCase("Y")) {
+			if (status.equalsIgnoreCase("Y")) {
 				dish.setIs_available(YesNo.Y);
-			}
-			else {
+			} else {
 				dish.setIs_available(YesNo.N);
 			}
-			
+
 			dishRepo.save(dish);
 		}
 
@@ -207,9 +220,7 @@ public class DishesService {
 
 		return dish;
 	}
-	
-	
-	
+
 	// Update dish image of existing dish
 	public Dish updateImageDish(Long dishId, byte[] img) {
 		Dish dish = null;
@@ -224,31 +235,30 @@ public class DishesService {
 		}
 		return dish;
 	}
-	
-	
+
 	// Get all dishes details with their dish category:
 	public List<AllDishesResponse> allDishes() {
-		
+
 		List<AllDishesResponse> output = new ArrayList<>();
-		
-		//Get all the dishes categories:
+
+		// Get all the dishes categories:
 		List<DishCategory> categories = categoryRepo.findAll();
-		
+
 		for (DishCategory dishCategory : categories) {
-			
-			//Find dishes for each type of category:
+
+			// Find dishes for each type of category:
 			List<Dish> tempDishes = this.getDishesByCategory(dishCategory.getCategory_id());
-			
+
 			AllDishesResponse temp = new AllDishesResponse();
 			temp.setCategory_id(dishCategory.getCategory_id());
 			temp.setCategory_name(dishCategory.getCategory_name());
 			temp.setDishes(tempDishes);
-			
+
 			output.add(temp);
 		}
-		
+
 		return output;
-		
+
 	}
 
 }
