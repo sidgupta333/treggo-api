@@ -65,7 +65,7 @@ public class UsersService {
 
 				// Check if existing user exists:
 				Users exists = userRepo.findByUsername(req.getUsername());
-				if(exists != null) {
+				if(exists != null && req.getUser_id() == null) {
 					response.setValid(false);
 					response.setMessage("Exists");
 				}

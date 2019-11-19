@@ -7,11 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.treggo.entities.Dish;
@@ -38,7 +38,7 @@ public class DishesController {
 	
 	@ApiOperation(value = "Creates a new Dish Category")
 	@GetMapping("/createCategory/{category_name}")
-	public ResponseEntity<?> createNewCategory(@RequestParam String category_name) {
+	public ResponseEntity<?> createNewCategory(@PathVariable String category_name) {
 
 		DishCategory output = dishesService.createCategory(category_name);
 		if (output == null) {
@@ -61,7 +61,7 @@ public class DishesController {
 	
 	@ApiOperation(value = "Fetch particular Dish Category by Dish Id")
 	@GetMapping("/getDishCategory/{dishId}")
-	public DishCategory getOneCategory(@RequestParam Long dishId) {
+	public DishCategory getOneCategory(@PathVariable Long dishId) {
 
 		return dishesService.getCategory(dishId);
 	}
@@ -70,7 +70,7 @@ public class DishesController {
 	
 	@ApiOperation(value = "Delete a dish Category")
 	@DeleteMapping("/deleteCategory/{category_id}")
-	public ResponseEntity<?> deleteCategory(@RequestParam Long category_id) {
+	public ResponseEntity<?> deleteCategory(@PathVariable Long category_id) {
 
 		if (dishesService.deleteCategory(category_id)) {
 			return ResponseEntity.ok(new GeneralResponse("success"));
@@ -128,7 +128,7 @@ public class DishesController {
 	
 	@ApiOperation(value = "Fetch Dish by Dish ID")
 	@GetMapping("/getDish/ID/{dish_Id}")
-	public Dish getDishById(@RequestParam Long dish_Id) {
+	public Dish getDishById(@PathVariable Long dish_Id) {
 		return dishesService.getDIshById(dish_Id);
 	}
 
@@ -136,7 +136,7 @@ public class DishesController {
 	
 	@ApiOperation(value = "Fetch Dish by Dish Category ID")
 	@GetMapping("/getDish/category/{category_Id}")
-	public List<Dish> getDishByCategory(@RequestParam Long category_Id) {
+	public List<Dish> getDishByCategory(@PathVariable Long category_Id) {
 		return dishesService.getDishesByCategory(category_Id);
 	}
 
@@ -144,7 +144,7 @@ public class DishesController {
 	
 	@ApiOperation(value = "Delete a particular Dish")
 	@DeleteMapping("/deleteDish/{dish_Id}")
-	public ResponseEntity<?> deleteDish(@RequestParam Long dish_Id) {
+	public ResponseEntity<?> deleteDish(@PathVariable Long dish_Id) {
 
 		if (dishesService.deleteDish(dish_Id)) {
 			return ResponseEntity.ok(new GeneralResponse("success"));

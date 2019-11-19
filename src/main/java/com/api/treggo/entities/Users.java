@@ -16,7 +16,7 @@ import com.api.treggo.enums.YesNo;
 public class Users {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long user_id;
 	
 	@Enumerated(EnumType.STRING)

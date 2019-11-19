@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.treggo.entities.Users;
@@ -84,7 +84,7 @@ public class UserController {
 	
 	@ApiOperation(value="Delete a particular user")
 	@DeleteMapping("/deleteUser/{user_id}")
-	public GeneralResponse deleteUser(@RequestParam Long user_id) {
+	public GeneralResponse deleteUser(@PathVariable Long user_id) {
 		
 		boolean response = users.deleteUser(user_id);
 		

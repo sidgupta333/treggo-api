@@ -9,23 +9,27 @@ public class NewDishDTO {
 	private String dish_name;
 	private Long base_price;
 	private YesNo is_available;
-	private byte[] img_data;
+	private Long img_id; 
 
 	public NewDishDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	
+
 	public NewDishDTO(Long dish_id, Long category_id, String dish_name, Long base_price, YesNo is_available,
-			byte[] img_data) {
+			Long img_id) {
 		super();
 		this.dish_id = dish_id;
 		this.category_id = category_id;
 		this.dish_name = dish_name;
 		this.base_price = base_price;
 		this.is_available = is_available;
-		this.img_data = img_data;
+		this.img_id = img_id;
 	}
+
+
 
 	public Long getDish_id() {
 		return dish_id;
@@ -67,11 +71,16 @@ public class NewDishDTO {
 		this.is_available = is_available;
 	}
 
-	public byte[] getImg_data() {
-		return img_data;
+
+	public Long getImg_id() {
+		return img_id;
 	}
 
-	public void setImg_data(byte[] img_data) {
-		this.img_data = img_data;
+
+	public void setImg_id(Long img_id) {
+		this.img_id = img_id;
 	}
+
+	
+
 }

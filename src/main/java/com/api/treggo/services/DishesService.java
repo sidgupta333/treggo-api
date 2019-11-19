@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.api.treggo.entities.Dish;
 import com.api.treggo.entities.DishCategory;
+import com.api.treggo.entities.ImgMaster;
 import com.api.treggo.repositories.DishCategoryRepository;
 import com.api.treggo.repositories.DishRepository;
+import com.api.treggo.repositories.ImgMasterRepository;
 import com.api.treggo.requests.NewDishDTO;
 
 @Service
@@ -21,6 +23,9 @@ public class DishesService {
 
 	@Autowired
 	private DishRepository dishRepo;
+	
+	@Autowired
+	private ImgMasterRepository imgRepo;
 
 	// Save a new Dish category
 	public DishCategory createCategory(String categoryName) {
@@ -95,17 +100,24 @@ public class DishesService {
 	// Create a new Dish:
 	public Dish createDish(NewDishDTO req) {
 
-		Dish dto = new Dish();
-		BeanUtils.copyProperties(req, dto);
-		dto.setCreated_on(LocalDate.now());
+		Dish dish = new Dish();
+		BeanUtils.copyProperties(req, dish);
+		
+		DishCategory category = categoryRepo.fetchByCategoryID(req.getCategory_id());
+		ImgMaster img = imgRepo.fetchByImgID(req.getImg_id());
+		
+		dish.setCategory(category);
+		dish.setImg(img);
+		
+		dish.setCreated_on(LocalDate.now());
 
 		try {
-			dto = dishRepo.save(dto);
+			dish = dishRepo.save(dish);
 		} catch (Exception e) {
 			return null;
 		}
 
-		return dto;
+		return dish;
 	}
 
 	// Fetch all dishes list
@@ -135,7 +147,12 @@ public class DishesService {
 	public boolean deleteDish(Long id) {
 
 		try {
+			Dish dish = dishRepo.fetchByID(id);
+			ImgMaster img = dish.getImg();
 			dishRepo.deleteById(id);
+			
+			//Remove image for the selected dish
+			imgRepo.delete(img);
 		}
 
 		catch (Exception e) {

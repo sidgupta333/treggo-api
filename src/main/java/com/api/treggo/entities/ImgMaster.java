@@ -7,7 +7,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -16,7 +15,7 @@ import javax.persistence.Table;
 public class ImgMaster {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long img_id;
 
 	@Column(nullable = false)
@@ -25,9 +24,9 @@ public class ImgMaster {
 	@Column(nullable = false)
 	private String file_extension;
 	
-	@Lob
+	
 	@Column(nullable = false)
-	private byte[] img_data;
+	private String img_data;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "img")
 	private Dish dish;
@@ -39,7 +38,7 @@ public class ImgMaster {
 
 	
 
-	public ImgMaster(Long img_id, String img_path, String file_extension, byte[] img_data) {
+	public ImgMaster(Long img_id, String img_path, String file_extension, String img_data) {
 		super();
 		this.img_id = img_id;
 		this.img_path = img_path;
@@ -85,11 +84,11 @@ public class ImgMaster {
 		this.file_extension = file_extension;
 	}
 
-	public byte[] getImg_data() {
+	public String getImg_data() {
 		return img_data;
 	}
 
-	public void setImg_data(byte[] img_data) {
+	public void setImg_data(String img_data) {
 		this.img_data = img_data;
 	}
 	
