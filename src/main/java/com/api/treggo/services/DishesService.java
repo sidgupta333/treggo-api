@@ -1,6 +1,7 @@
 package com.api.treggo.services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -14,6 +15,7 @@ import com.api.treggo.repositories.DishCategoryRepository;
 import com.api.treggo.repositories.DishRepository;
 import com.api.treggo.repositories.ImgMasterRepository;
 import com.api.treggo.requests.NewDishDTO;
+import com.api.treggo.responses.AllDishesResponse;
 
 @Service
 public class DishesService {
@@ -135,7 +137,7 @@ public class DishesService {
 
 		try {
 			DishCategory cat = categoryRepo.fetchByCategoryID(cat_id);
-			return dishRepo.fetchByCategory(cat);
+			return dishRepo.fetchByCategory(cat.getCategory_id());
 		}
 
 		catch (Exception e) {
@@ -193,6 +195,32 @@ public class DishesService {
 			return null;
 		}
 		return dish;
+	}
+	
+	
+	// Get all dishes details with their dish category:
+	public List<AllDishesResponse> allDishes() {
+		
+		List<AllDishesResponse> output = new ArrayList<>();
+		
+		//Get all the dishes categories:
+		List<DishCategory> categories = categoryRepo.findAll();
+		
+		for (DishCategory dishCategory : categories) {
+			
+			//Find dishes for each type of category:
+			List<Dish> tempDishes = this.getDishesByCategory(dishCategory.getCategory_id());
+			
+			AllDishesResponse temp = new AllDishesResponse();
+			temp.setCategory_id(dishCategory.getCategory_id());
+			temp.setCategory_name(dishCategory.getCategory_name());
+			temp.setDishes(tempDishes);
+			
+			output.add(temp);
+		}
+		
+		return output;
+		
 	}
 
 }

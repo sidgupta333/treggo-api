@@ -20,6 +20,7 @@ import com.api.treggo.requests.NewDishDTO;
 import com.api.treggo.requests.UpdateCategoryDTO;
 import com.api.treggo.requests.UpdateImgDTO;
 import com.api.treggo.requests.UpdatePriceDTO;
+import com.api.treggo.responses.AllDishesResponse;
 import com.api.treggo.responses.GeneralResponse;
 import com.api.treggo.services.DishesService;
 
@@ -181,6 +182,13 @@ public class DishesController {
 		}
 		
 		return ResponseEntity.ok(d);
+	}
+	
+	@ApiOperation(value = "Get all the dishes in the hierarchy of dishes category")
+	@GetMapping("/dishes/categoriesAll")
+	public List<AllDishesResponse> allDishes() {
+		
+		return dishesService.allDishes();
 	}
 
 }
