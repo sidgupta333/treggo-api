@@ -60,7 +60,15 @@ public class DishesService {
 	// Delete existing dish category
 	public boolean deleteCategory(Long catId) {
 
+
 		try {
+			//Delete al dishes of this category
+			List<Dish> dishes = dishRepo.fetchByCategory(catId);
+
+			for (Dish dish:dishes) {
+				this.deleteDish(dish.getDish_id());
+			}
+
 			categoryRepo.deleteById(catId);
 		}
 
