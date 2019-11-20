@@ -36,7 +36,7 @@ public class DishesService {
 		DishCategory dto = new DishCategory();
 		dto.setCategory_name(categoryName);
 		
-		if(category_id != null) {
+		if(category_id != 0) {
 			dto.setCategory_id(category_id);
 		}
 		
