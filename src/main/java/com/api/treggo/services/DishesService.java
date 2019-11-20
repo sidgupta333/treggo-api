@@ -31,10 +31,15 @@ public class DishesService {
 	private ImgMasterRepository imgRepo;
 
 	// Save a new Dish category
-	public DishCategory createCategory(String categoryName) {
+	public DishCategory createCategory(String categoryName, Long category_id) {
 
 		DishCategory dto = new DishCategory();
 		dto.setCategory_name(categoryName);
+		
+		if(category_id != null) {
+			dto.setCategory_id(category_id);
+		}
+		
 		dto.setCreated_on(LocalDate.now());
 
 		try {
