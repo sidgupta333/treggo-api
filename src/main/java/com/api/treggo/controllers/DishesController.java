@@ -39,10 +39,11 @@ public class DishesController {
 	
 	
 	@ApiOperation(value = "Creates a new Dish Category")
-	@GetMapping("/createCategory/{category_name}")
-	public ResponseEntity<?> createNewCategory(@PathVariable String category_name) {
+	@GetMapping("/createCategory/{category_name}/{category_id}")
+	public ResponseEntity<?> createNewCategory(@PathVariable String category_name, @PathVariable Long category_id) {
 
-		DishCategory output = dishesService.createCategory(category_name);
+		
+		DishCategory output = dishesService.createCategory(category_name, category_id);
 		if (output == null) {
 			return ResponseEntity.status(500).body(new GeneralResponse("failure"));
 		} else {
