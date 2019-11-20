@@ -30,10 +30,24 @@ public class ImgMaster {
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "img")
 	private Dish dish;
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "image")
+	private BannerMaster bannerMaster;
+
+	public BannerMaster getBannerMaster() {
+		return bannerMaster;
+	}
+
+
+
+	public void setBannerMaster(BannerMaster bannerMaster) {
+		this.bannerMaster = bannerMaster;
+	}
+
+
 
 	public ImgMaster() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	
