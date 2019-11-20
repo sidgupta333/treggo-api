@@ -2,6 +2,7 @@ package com.api.treggo.entities;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,10 +17,13 @@ public class TableMaster {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long table_id;
 	
+	@Column(nullable = false)
 	private String device_id;
 	
+	@Column(nullable = false)
 	private String table_number;
 	
+	@Column(nullable = false)
 	private LocalDate created_on;
 
 	public TableMaster() {
