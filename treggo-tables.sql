@@ -74,7 +74,6 @@ CREATE TABLE BANNER_MASTER(
   img_id INTEGER,
   is_available VARCHAR(1),
   start_date DATE,
-  end_date DATE,
   created_on TIMESTAMP NOT NULL,
   FOREIGN KEY (img_id) REFERENCES IMG_MASTER(img_id)
 );

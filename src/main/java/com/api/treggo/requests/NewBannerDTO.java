@@ -10,21 +10,19 @@ public class NewBannerDTO {
 	private Long img_id;
 	private YesNo is_available;
 	private LocalDate start_date;
-	private LocalDate end_date;
 	
 	public NewBannerDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public NewBannerDTO(Long banner_id, Long img_id, YesNo is_available, LocalDate start_date, LocalDate end_date
+	public NewBannerDTO(Long banner_id, Long img_id, YesNo is_available, LocalDate start_date
 			) {
 		super();
 		this.banner_id = banner_id;
 		this.img_id = img_id;
 		this.is_available = is_available;
 		this.start_date = start_date;
-		this.end_date = end_date;
 	}
 
 	public Long getBanner_id() {
@@ -57,17 +55,6 @@ public class NewBannerDTO {
 
 	public void setStart_date(LocalDate start_date) {
 		this.start_date = start_date;
-	}
-
-	public LocalDate getEnd_date() {
-		return end_date;
-	}
-
-	public void setEnd_date(LocalDate end_date) {
-		this.end_date = end_date;
-	}
-
-	
-	
+	}	
 }
 

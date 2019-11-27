@@ -41,22 +41,18 @@ public class BannerMaster {
 	private LocalDate start_date;
 
 	@Column(nullable = false)
-	private LocalDate end_date;
-
-	@Column(nullable = false)
 	private LocalDate created_on;
 	
 	public BannerMaster() {
 		super();
 	}
 
-	public BannerMaster(ImgMaster image, YesNo is_available, LocalDate start_date, LocalDate end_date,
+	public BannerMaster(ImgMaster image, YesNo is_available, LocalDate start_date,
 			LocalDate created_on) {
 		super();
 		this.image = image;
 		this.is_available = is_available;
 		this.start_date = start_date;
-		this.end_date = end_date;
 		this.created_on = created_on;
 	}
 
@@ -90,14 +86,6 @@ public class BannerMaster {
 
 	public void setStart_date(LocalDate start_date) {
 		this.start_date = start_date;
-	}
-
-	public LocalDate getEnd_date() {
-		return end_date;
-	}
-
-	public void setEnd_date(LocalDate end_date) {
-		this.end_date = end_date;
 	}
 
 	public LocalDate getCreated_on() {
