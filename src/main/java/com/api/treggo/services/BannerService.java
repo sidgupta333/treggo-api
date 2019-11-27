@@ -34,6 +34,8 @@ public class BannerService {
 		else {
 			BannerMaster banner = new BannerMaster();
 			BeanUtils.copyProperties(req, banner);
+			String localDate = req.getStart_date();
+			banner.setStart_date(LocalDate.parse(localDate));
 			banner.setImage(img);
 			banner.setCreated_on(LocalDate.now());
 			
