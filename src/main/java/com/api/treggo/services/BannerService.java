@@ -62,7 +62,9 @@ public class BannerService {
 	
 	public boolean deleteBanner(Long id) {
 		try {
-			bannerRepo.deleteById(id);
+			BannerMaster temp = bannerRepo.fetchByBannerID(id);
+			imgRepo.delete(temp.getImage());
+			bannerRepo.delete(temp);
 			return true;
 		}
 		catch(Exception e) {
