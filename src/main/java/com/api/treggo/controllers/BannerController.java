@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.treggo.entities.BannerMaster;
 import com.api.treggo.requests.NewBannerDTO;
+import com.api.treggo.requests.UpdateBannerDTO;
 import com.api.treggo.responses.GeneralResponse;
 import com.api.treggo.services.BannerService;
 
@@ -49,6 +50,22 @@ public class BannerController {
 	
 		return bannerService.getAllBanners();
 	}
+	
+	
+	@ApiOperation(value="Update banner status")
+	@PostMapping("/updateStatus")
+	public ResponseEntity<?> updateStatus(@RequestBody UpdateBannerDTO dto) {
+		
+		boolean result = bannerService.updateStatus(dto);
+		if(result) {
+			return ResponseEntity.ok(new GeneralResponse("success"));
+		}
+		
+		else {
+			return ResponseEntity.status(500).body(new GeneralResponse("failure"));
+		}
+	}
+	
 	
 	
 	@ApiOperation(value = "Delete existing banner")

@@ -12,6 +12,7 @@ import com.api.treggo.entities.ImgMaster;
 import com.api.treggo.repositories.BannerRepository;
 import com.api.treggo.repositories.ImgMasterRepository;
 import com.api.treggo.requests.NewBannerDTO;
+import com.api.treggo.requests.UpdateBannerDTO;
 
 @Service
 public class BannerService {
@@ -47,6 +48,21 @@ public class BannerService {
 				return null;
 			}
 		}
+	}
+	
+	public boolean updateStatus(UpdateBannerDTO dto) {
+		
+		
+		try {
+			BannerMaster banner = bannerRepo.fetchByBannerID(dto.getBanner_id());
+			banner.setIs_available(dto.getStatus());
+			bannerRepo.save(banner);
+			return true;
+		}
+		catch(Exception e) {
+			return false;
+		}
+		
 	}
 	
 	
