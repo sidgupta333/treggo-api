@@ -91,7 +91,7 @@ public class ImageController {
 		}
 	}
 
-	@ApiOperation(value = "Download image from server based on dish ID")
+	@ApiOperation(value = "Download image from server based on Banner ID")
 	@GetMapping("/download/banner/{bannerId}")
 	public ResponseEntity<?> downloadImageBanner(@PathVariable Long bannerId) {
 
