@@ -20,7 +20,7 @@ public class Coupon {
 	@Column(nullable = false)
 	private String coupon_name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "description")
 	private String desc;
 
 	@Column(nullable = false)

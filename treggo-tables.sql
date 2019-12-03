@@ -90,6 +90,7 @@ CREATE TABLE TABLE_MASTER(
 CREATE TABLE COUPON(
   coupon_id serial PRIMARY KEY,
   coupon_name VARCHAR(50) NOT NULL,
+  description VARCHAR(255) NOT NULL,  
   percentage_discount INTEGER,
   max_discount INTEGER,
   created_on TIMESTAMP NOT NULL
