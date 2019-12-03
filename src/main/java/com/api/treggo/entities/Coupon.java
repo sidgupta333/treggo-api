@@ -10,22 +10,25 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="COUPON")
+@Table(name = "COUPON")
 public class Coupon {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long coupon_id;
-	
+
 	@Column(nullable = false)
 	private String coupon_name;
-	
+
+	@Column(nullable = false)
+	private String desc;
+
 	@Column(nullable = false)
 	private Long percentage_discount;
-	
+
 	@Column(nullable = false)
 	private Long max_discount;
-	
+
 	@Column(nullable = false)
 	private LocalDate created_on;
 
@@ -33,12 +36,23 @@ public class Coupon {
 		super();
 	}
 
-	public Coupon(String coupon_name, Long percentage_discount, Long max_discount, LocalDate created_on) {
+	public Coupon(Long coupon_id, String coupon_name, String desc, Long percentage_discount, Long max_discount,
+			LocalDate created_on) {
 		super();
+		this.coupon_id = coupon_id;
 		this.coupon_name = coupon_name;
+		this.desc = desc;
 		this.percentage_discount = percentage_discount;
 		this.max_discount = max_discount;
 		this.created_on = created_on;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 	public Long getCoupon_id() {
@@ -80,5 +94,5 @@ public class Coupon {
 	public void setCreated_on(LocalDate created_on) {
 		this.created_on = created_on;
 	}
-	
+
 }
