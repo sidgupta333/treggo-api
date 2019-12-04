@@ -21,7 +21,7 @@ public class Coupon {
 	private String coupon_name;
 
 	@Column(nullable = false, columnDefinition = "description")
-	private String desc;
+	private String description;
 
 	@Column(nullable = false)
 	private Long percentage_discount;
@@ -41,18 +41,18 @@ public class Coupon {
 		super();
 		this.coupon_id = coupon_id;
 		this.coupon_name = coupon_name;
-		this.desc = desc;
+		this.description = desc;
 		this.percentage_discount = percentage_discount;
 		this.max_discount = max_discount;
 		this.created_on = created_on;
 	}
 
 	public String getDesc() {
-		return desc;
+		return description;
 	}
 
 	public void setDesc(String desc) {
-		this.desc = desc;
+		this.description = desc;
 	}
 
 	public Long getCoupon_id() {
