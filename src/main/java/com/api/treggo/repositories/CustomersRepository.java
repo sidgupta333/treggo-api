@@ -10,4 +10,8 @@ public interface CustomersRepository extends JpaRepository<Customers, Long> {
 
 	@Query("from Customers where customer_id = :customer_id")
 	public Customers fetchByCustomerId(@Param("customer_id") Long id);
+	
+	@Query("from Customers where phone = :phone")
+	public Customers fetchByPhone(@Param("phone") String phone);
+	
 }

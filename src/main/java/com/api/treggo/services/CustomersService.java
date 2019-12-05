@@ -21,18 +21,28 @@ public class CustomersService {
 	public Customers createCustomer(NewCustomerDTO dto) {
 
 		Customers customer = new Customers();
-
-		BeanUtils.copyProperties(dto, customer);
-		customer.setCreated_on(LocalDate.now());
-
 		try {
-			cRepo.save(customer);
+			
+			Customers cst = cRepo.fetchByPhone(dto.getPhone());
+			
+			if(cst != null) {
+				cst.setValidated(YesNo.N);
+				cRepo.save(cst);
+				return cst;
+			}
+			else {
+				BeanUtils.copyProperties(dto, customer);
+				customer.setCreated_on(LocalDate.now());				
+				cRepo.save(customer);
+				return customer;
+			}
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 
-		return customer;
 	}
 
 	public List<Customers> getAllCustomers() {
