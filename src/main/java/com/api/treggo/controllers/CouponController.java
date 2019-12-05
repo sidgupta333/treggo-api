@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.treggo.entities.Coupon;
+import com.api.treggo.requests.ApplyCouponDTO;
 import com.api.treggo.requests.CouponDTO;
+import com.api.treggo.responses.AmountResponse;
 import com.api.treggo.responses.GeneralResponse;
 import com.api.treggo.services.CouponService;
 
@@ -61,6 +63,20 @@ public class CouponController {
 		
 		else {
 			return ResponseEntity.status(500).body(new GeneralResponse("failure"));
+		}
+	}
+	
+	
+	@ApiOperation(value = "Calculate total amount after applying coupon code")
+	@PostMapping("/apply")
+	public ResponseEntity<?> calculateAmount(@RequestBody ApplyCouponDTO dto) {
+		
+		Long amount = couponService.calculateDiscountAmount(dto.getCoupon_name(), dto.getAmount());
+		if(amount == null) {
+			return ResponseEntity.status(500).body(new GeneralResponse("failure"));
+		}
+		else {
+			return ResponseEntity.ok(new AmountResponse(amount));
 		}
 	}
 }

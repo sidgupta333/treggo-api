@@ -67,4 +67,39 @@ public class CouponService {
 		
 		return res;
 	}
+	
+	
+	//Calculate amount based on applied coupon
+	public Long calculateDiscountAmount(String couponName, Long total) {
+		Long amount = null;
+		
+		try {
+			Coupon coupon = couponRepo.fetchByCouponName(couponName);
+			
+			if(coupon != null) {
+				
+				//Check if some percentage amount is present
+				if(coupon.getPercentage_discount() != null) {
+					
+					double percentageAmount = ((double)coupon.getPercentage_discount() / 100) * total;
+					if(percentageAmount > coupon.getMax_discount()) {
+						amount = total - coupon.getMax_discount();
+					}
+					else {
+						amount = total - (long)percentageAmount;
+					}
+				}
+				else {
+					amount = total - coupon.getMax_discount();
+				}
+			}
+			
+			return amount;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 }
