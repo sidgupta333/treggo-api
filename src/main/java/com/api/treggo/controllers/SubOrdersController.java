@@ -64,6 +64,20 @@ public class SubOrdersController {
 		return subService.getSubOrdersByOrderStatus(status);
 	}
 	
+	@ApiOperation(value="Get all SubOrder based on suborder ID")
+	@GetMapping("/getOne/{id}")
+	public ResponseEntity<?> getSubOrderById(@PathVariable Long id) {
+		
+		SubOrders res = subService.getSubOrderById(id);
+		if(res == null) {
+			return ResponseEntity.status(500).body(new GeneralResponse("failed"));
+		}
+		else {
+			return ResponseEntity.ok(res);
+		}
+	}
+	
+	
 	
 	@ApiOperation(value="Update the status of existing sub-order")
 	@PostMapping("/updateStatus")

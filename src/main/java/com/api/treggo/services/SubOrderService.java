@@ -103,6 +103,11 @@ public class SubOrderService {
 		}
 	}
 	
+	//Fetch subOrder by orderID:
+	public SubOrders getSubOrderById(Long id) {
+		return subRepo.fetchByID(id);
+	}
+	
 	
 	//Update sub-order status:
 	public boolean updateSubOrderStatus(Long subOrderId, SubOrderStatus status) {
