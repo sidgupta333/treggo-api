@@ -44,6 +44,20 @@ public class TableMasterController {
 		return tableService.getAllTables();
 	}
 	
+	@ApiOperation(value="Get table based on device id")
+	@GetMapping("/get/device/{device_id}")
+	public ResponseEntity<?> getTableByDevice(@PathVariable String device_id) {
+		
+		TableMaster res = tableService.getTableByDevice(device_id);
+		
+		if(res == null) {
+			return ResponseEntity.status(500).body(new GeneralResponse("failure"));
+		}
+		else {
+			return ResponseEntity.ok(res);
+		}
+	}
+	
 	
 	@ApiOperation(value = "Delete existing table")
 	@DeleteMapping("/delete/{table_id}")

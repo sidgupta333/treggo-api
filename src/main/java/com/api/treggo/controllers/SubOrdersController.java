@@ -16,6 +16,7 @@ import com.api.treggo.entities.SubOrders;
 import com.api.treggo.enums.SubOrderStatus;
 import com.api.treggo.requests.NewSubOrderDTO;
 import com.api.treggo.requests.UpdateSubOrderStatus;
+import com.api.treggo.responses.AllSubOrdersResponse;
 import com.api.treggo.responses.GeneralResponse;
 import com.api.treggo.responses.SubOrderResponse;
 import com.api.treggo.services.SubOrderService;
@@ -93,5 +94,20 @@ public class SubOrdersController {
 		}
 	}
 	
+	
+	@ApiOperation(value="Update the status of existing sub-order")
+	@GetMapping("/drillDown")
+	public ResponseEntity<?> getDrillDown() {
+		
+		List<AllSubOrdersResponse> res = subService.getAllSubOrdersAndCustomer();
+		
+		if(res == null) {
+			return ResponseEntity.status(500).body(new GeneralResponse("failure"));
+		}
+		
+		else {
+			return ResponseEntity.ok(res);
+		}
+	}
 	
 }

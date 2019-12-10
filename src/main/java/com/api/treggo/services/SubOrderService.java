@@ -16,6 +16,7 @@ import com.api.treggo.repositories.CustomersRepository;
 import com.api.treggo.repositories.OrderRepository;
 import com.api.treggo.repositories.SubOrderRepository;
 import com.api.treggo.requests.NewSubOrderDTO;
+import com.api.treggo.responses.AllSubOrdersResponse;
 import com.api.treggo.responses.SubOrderResponse;
 
 @Service
@@ -43,7 +44,7 @@ public class SubOrderService {
 
 			// Map all details to request object
 			BeanUtils.copyProperties(dto, res);
-			
+
 			res.setCustomer(cst);
 			res.setOrder(ord);
 			res.setCreated_on(LocalDate.now());
@@ -58,94 +59,121 @@ public class SubOrderService {
 
 	// Fetch all SubOrders
 	public List<SubOrderResponse> getAllSubOrders() {
-		
+
 		try {
 			List<SubOrders> subOrders = subRepo.findAll();
 			List<SubOrderResponse> res = getSubResponse(subOrders);
-			
+
 			return res;
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	
+
 	// Fetch subOrders based on order id:
 	public List<SubOrderResponse> getSubOrdersByOrderID(Long order_id) {
-		
+
 		try {
 			List<SubOrders> subOrders = subRepo.fetchByOrderId(order_id);
 			List<SubOrderResponse> res = getSubResponse(subOrders);
-			
+
 			return res;
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	
+
 	// Fetch subOrders based on order status:
 	public List<SubOrderResponse> getSubOrdersByOrderStatus(SubOrderStatus status) {
-		
+
 		try {
 			List<SubOrders> subOrders = subRepo.fetchByStatus(status.toString());
 			List<SubOrderResponse> res = getSubResponse(subOrders);
-			
+
 			return res;
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	//Fetch subOrder by orderID:
+
+	// Fetch subOrder by orderID:
 	public SubOrders getSubOrderById(Long id) {
 		return subRepo.fetchByID(id);
 	}
-	
-	
-	//Update sub-order status:
+
+	// Update sub-order status:
 	public boolean updateSubOrderStatus(Long subOrderId, SubOrderStatus status) {
-		
+
 		try {
 			SubOrders sb = subRepo.fetchByID(subOrderId);
 			sb.setStatus(status);
 			subRepo.save(sb);
-			
+
 			return true;
-		}
-		catch(Exception e) {
-			return false;			
+		} catch (Exception e) {
+			return false;
 		}
 	}
-	
-	
-	
-	private List<SubOrderResponse> getSubResponse(List<SubOrders> subOrders) {
+
+	// Get all open suborders with the current status and tables:
+	public List<AllSubOrdersResponse> getAllSubOrdersAndCustomer() {
 		
-		List<SubOrderResponse> res = new ArrayList<>();
-		
-		int i = 0;
-		for(SubOrders sub : subOrders) {
+		//Get all opened suborders
+		try {
 			
+		
+			List<SubOrders> subOrders = subRepo.findAll();
+			
+			List<AllSubOrdersResponse> response = new ArrayList<>();
+			
+			int i = 0;
+			for(SubOrders sb : subOrders) {
+				
+				AllSubOrdersResponse tempRes = new AllSubOrdersResponse();
+				
+				tempRes.setSub_order_id(sb.getSub_order_id());
+				tempRes.setOrder_id(sb.getOrder().getOrder_id());
+				tempRes.setSub_order_status(sb.getStatus());
+				tempRes.setOrder_status(sb.getOrder().getOrder_status());
+				tempRes.setCustomer_id(sb.getCustomer().getCustomer_id());
+				tempRes.setCustomer_name(sb.getCustomer().getCustomer_name());
+				tempRes.setDishes(sb.getDishes().split("\\|"));
+				tempRes.setquantities(sb.getQuantities().split("\\|"));
+				tempRes.setTable_id(sb.getCustomer().getTable().getTable_id());
+				tempRes.setTable_number(sb.getCustomer().getTable().getTable_number());
+				
+				response.add(i, tempRes);
+				i++;
+			}
+			
+			return response;
+		}
+		catch(Exception e) {
+			return null;
+		}
+		
+	}
+
+	private List<SubOrderResponse> getSubResponse(List<SubOrders> subOrders) {
+
+		List<SubOrderResponse> res = new ArrayList<>();
+
+		int i = 0;
+		for (SubOrders sub : subOrders) {
+
 			SubOrderResponse rs = new SubOrderResponse();
 			BeanUtils.copyProperties(sub, rs);
 			rs.setOrder_id(sub.getOrder().getOrder_id());
 			rs.setCustomer_id(sub.getCustomer().getCustomer_id());
-			
+
 			res.set(i, rs);
 			i++;
 		}
-		
+
 		return res;
 	}
-	
-	
-	
 
 }

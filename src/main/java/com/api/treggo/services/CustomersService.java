@@ -33,7 +33,7 @@ public class CustomersService {
 			Customers cst = cRepo.fetchByPhone(dto.getPhone());
 			TableMaster table = tRepo.fetchByTableID(dto.getTable_id());
 			
-			List<Customers> activeCst = cRepo.fetchByStatusTableId("Y", dto.getTable_id());
+			List<Customers> activeCst = cRepo.fetchByStatusTableId(YesNo.Y, dto.getTable_id());
 			
 			// Deacticate all existing customers of current table
 			for(Customers c: activeCst) {

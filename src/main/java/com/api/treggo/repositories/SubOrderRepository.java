@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.api.treggo.entities.SubOrders;
+import com.api.treggo.enums.SubOrderStatus;
 
 public interface SubOrderRepository extends JpaRepository<SubOrders, Long> {
 
@@ -18,4 +19,8 @@ public interface SubOrderRepository extends JpaRepository<SubOrders, Long> {
 	
 	@Query("from SubOrders where status = :status")
 	public List<SubOrders> fetchByStatus(@Param("status") String status);
+	
+	@Query("from SubOrders where status != :status")
+	public List<SubOrders> fetchByNotStatus(@Param("status") SubOrderStatus status);
+	
 }

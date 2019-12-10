@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.api.treggo.entities.Customers;
+import com.api.treggo.enums.YesNo;
 
 public interface CustomersRepository extends JpaRepository<Customers, Long> {
 
@@ -17,5 +18,5 @@ public interface CustomersRepository extends JpaRepository<Customers, Long> {
 	public Customers fetchByPhone(@Param("phone") String phone);
 	
 	@Query("from Customers where validated = :status and table_id = :table_id")
-	public List<Customers> fetchByStatusTableId(@Param("status") String status, @Param("table_id") Long table_id);
+	public List<Customers> fetchByStatusTableId(@Param("status") YesNo status, @Param("table_id") Long table_id);
 }

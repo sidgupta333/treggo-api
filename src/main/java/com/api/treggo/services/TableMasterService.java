@@ -42,4 +42,10 @@ public class TableMasterService {
 		
 		return true;
 	}
+	
+	
+	//Fetch table details by device id
+	public TableMaster getTableByDevice(String device_id) {
+		return tableRepo.fetchByDeviceID(device_id);
+	}
 }
