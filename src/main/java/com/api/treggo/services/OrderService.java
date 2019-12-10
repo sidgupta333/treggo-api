@@ -47,6 +47,10 @@ public class OrderService {
 		return orderRepo.findAll();
 	}
 	
+	public Orders getOrderById(Long id) {
+		return orderRepo.fetchByOrderId(id);
+	}
+	
 	
 	public boolean updateOrder(Long order_id, String status) {
 		
