@@ -1,27 +1,32 @@
-package com.api.treggo.requests;
+package com.api.treggo.responses;
+
+import java.time.LocalDate;
 
 import com.api.treggo.enums.YesNo;
 
-public class NewCustomerDTO {
+public class CustomerResponse {
 
 	private Long customer_id;
 	private Long table_id;
 	private String customer_name;
 	private String phone;
 	private YesNo validated;
+	private LocalDate created_on;
 
-	public NewCustomerDTO() {
+	public CustomerResponse() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public NewCustomerDTO(Long customer_id, Long table_id, String customer_name, String phone, YesNo validated) {
+	public CustomerResponse(Long customer_id, Long table_id, String customer_name, String phone, YesNo validated,
+			LocalDate created_on) {
 		super();
 		this.customer_id = customer_id;
 		this.table_id = table_id;
 		this.customer_name = customer_name;
 		this.phone = phone;
 		this.validated = validated;
+		this.created_on = created_on;
 	}
 
 	public Long getCustomer_id() {
@@ -62,6 +67,14 @@ public class NewCustomerDTO {
 
 	public void setValidated(YesNo validated) {
 		this.validated = validated;
+	}
+
+	public LocalDate getCreated_on() {
+		return created_on;
+	}
+
+	public void setCreated_on(LocalDate created_on) {
+		this.created_on = created_on;
 	}
 
 }

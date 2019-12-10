@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.treggo.entities.Customers;
 import com.api.treggo.requests.NewCustomerDTO;
 import com.api.treggo.requests.ValidateCustomerDTO;
+import com.api.treggo.responses.CustomerResponse;
 import com.api.treggo.responses.GeneralResponse;
 import com.api.treggo.services.CustomersService;
 
@@ -44,7 +45,7 @@ public class CustomersController {
 	
 	@ApiOperation(value="Get all the existing customers")
 	@GetMapping("/getAll")
-	public List<Customers> getAllCustomers() {
+	public List<CustomerResponse> getAllCustomers() {
 		return cService.getAllCustomers();
 	}
 	

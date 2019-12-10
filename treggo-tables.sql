@@ -11,10 +11,12 @@ CREATE TABLE USERS(
 
 CREATE TABLE Customers(
    customer_id serial PRIMARY KEY,
+   table_id INTEGER,
    customer_name VARCHAR (100) NOT NULL,
    phone VARCHAR (10) NOT NULL,
    VALIDATED vARCHAR(1),
-   created_on TIMESTAMP NOT NULL
+   created_on TIMESTAMP NOT NULL,
+   FOREIGN KEY (table_id) REFERENCES TABLE_MASTER(table_id)
 );
 
 CREATE TABLE IMG_MASTER(
@@ -82,7 +84,7 @@ CREATE TABLE BANNER_MASTER(
 CREATE TABLE TABLE_MASTER(
   table_id serial PRIMARY KEY,
   device_id VARCHAR(50),
-  table_number VARCHAR(10),
+  table_number VARCHAR(TABLE_MASTER10),
   created_on TIMESTAMP NOT NULL
 );
 
