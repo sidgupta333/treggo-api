@@ -125,7 +125,7 @@ public class SubOrderService {
 		try {
 			
 		
-			List<SubOrders> subOrders = subRepo.findAll();
+			List<SubOrders> subOrders = subRepo.fetchByNotStatus(SubOrderStatus.CLOSED);
 			
 			List<AllSubOrdersResponse> response = new ArrayList<>();
 			
