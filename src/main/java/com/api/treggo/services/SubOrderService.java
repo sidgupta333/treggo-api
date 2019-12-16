@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.api.treggo.entities.Customers;
 import com.api.treggo.entities.Orders;
 import com.api.treggo.entities.SubOrders;
+import com.api.treggo.enums.OrderStatus;
 import com.api.treggo.enums.SubOrderStatus;
 import com.api.treggo.repositories.CustomersRepository;
 import com.api.treggo.repositories.OrderRepository;
@@ -120,41 +121,43 @@ public class SubOrderService {
 
 	// Get all open suborders with the current status and tables:
 	public List<AllSubOrdersResponse> getAllSubOrdersAndCustomer() {
-		
-		//Get all opened suborders
+
+		// Get all opened suborders
 		try {
-			
-		
+
 			List<SubOrders> subOrders = subRepo.fetchByNotStatus(SubOrderStatus.CLOSED);
-			
+
 			List<AllSubOrdersResponse> response = new ArrayList<>();
-			
+
 			int i = 0;
-			for(SubOrders sb : subOrders) {
-				
+			for (SubOrders sb : subOrders) {
+
 				AllSubOrdersResponse tempRes = new AllSubOrdersResponse();
-				
-				tempRes.setSub_order_id(sb.getSub_order_id());
-				tempRes.setOrder_id(sb.getOrder().getOrder_id());
-				tempRes.setSub_order_status(sb.getStatus());
-				tempRes.setOrder_status(sb.getOrder().getOrder_status());
-				tempRes.setCustomer_id(sb.getCustomer().getCustomer_id());
-				tempRes.setCustomer_name(sb.getCustomer().getCustomer_name());
-				tempRes.setDishes(sb.getDishes().split("\\|"));
-				tempRes.setquantities(sb.getQuantities().split("\\|"));
-				tempRes.setTable_id(sb.getCustomer().getTable().getTable_id());
-				tempRes.setTable_number(sb.getCustomer().getTable().getTable_number());
-				
-				response.add(i, tempRes);
-				i++;
+
+				if (sb.getOrder().getOrder_status().equals(OrderStatus.OPEN)) {
+					tempRes.setOrder_status(sb.getOrder().getOrder_status());
+
+					tempRes.setSub_order_id(sb.getSub_order_id());
+					tempRes.setOrder_id(sb.getOrder().getOrder_id());
+					tempRes.setSub_order_status(sb.getStatus());
+
+					tempRes.setCustomer_id(sb.getCustomer().getCustomer_id());
+					tempRes.setCustomer_name(sb.getCustomer().getCustomer_name());
+					tempRes.setDishes(sb.getDishes().split("\\|"));
+					tempRes.setquantities(sb.getQuantities().split("\\|"));
+					tempRes.setTable_id(sb.getCustomer().getTable().getTable_id());
+					tempRes.setTable_number(sb.getCustomer().getTable().getTable_number());
+
+					response.add(i, tempRes);
+					i++;
+				}
 			}
-			
+
 			return response;
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
-		
+
 	}
 
 	private List<SubOrderResponse> getSubResponse(List<SubOrders> subOrders) {
