@@ -2,6 +2,8 @@ package com.api.treggo.responses;
 
 import org.springframework.stereotype.Component;
 
+import com.api.treggo.enums.YesNo;
+
 @Component
 public class LoginResponse {
 
@@ -9,21 +11,29 @@ public class LoginResponse {
 	private String fullName;
 	private String message;
 	private boolean status;
-	
+	private YesNo is_admin;
+
 	public LoginResponse() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public LoginResponse(String username, String fullName, String message, boolean status) {
+	public LoginResponse(String username, String fullName, String message, boolean status, YesNo is_admin) {
 		super();
 		this.username = username;
 		this.fullName = fullName;
 		this.message = message;
 		this.status = status;
+		this.is_admin = is_admin;
 	}
-	
-	
+
+	public YesNo getIs_admin() {
+		return is_admin;
+	}
+
+	public void setIs_admin(YesNo is_admin) {
+		this.is_admin = is_admin;
+	}
 
 	public boolean isStatus() {
 		return status;
@@ -56,5 +66,5 @@ public class LoginResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
 }

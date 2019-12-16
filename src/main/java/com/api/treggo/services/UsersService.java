@@ -157,6 +157,7 @@ public class UsersService {
 				response.setMessage("success");
 				response.setFullName(user.getFull_name());
 				response.setUsername(user.getUsername());
+				response.setIs_admin(user.getIs_admin());
 			}
 			else {
 				response.setStatus(false);
