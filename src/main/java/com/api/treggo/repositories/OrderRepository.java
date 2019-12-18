@@ -1,5 +1,8 @@
 package com.api.treggo.repositories;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,5 +15,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 	
 	@Query("from Orders where order_id = :order_id")
 	public Orders fetchByOrderId(@Param("order_id") Long id);
+	
+	@Query("from Orders where created_on between :start_date and :end_date")
+	public List<Orders> fetchOrdersByDate(@Param("start_date") LocalDate start_date, @Param("end_date") LocalDate end_date);
 
 }

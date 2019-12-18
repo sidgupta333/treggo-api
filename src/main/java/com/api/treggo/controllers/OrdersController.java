@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.treggo.entities.Orders;
 import com.api.treggo.requests.NewOrderDTO;
 import com.api.treggo.requests.UpdateOrderDTO;
+import com.api.treggo.responses.ChartsResponse;
 import com.api.treggo.responses.GeneralResponse;
 import com.api.treggo.services.OrderService;
 
@@ -76,5 +77,10 @@ public class OrdersController {
 	}
 	
 	
+	@ApiOperation(value="Get Data for drawing charts")
+	@GetMapping("/chart")
+	public List<ChartsResponse> getChartData() {
+		return orderService.getChartsData();
+	}
 	
 }
