@@ -15,9 +15,9 @@ import com.api.treggo.enums.OrderStatus;
 import com.api.treggo.repositories.CustomersRepository;
 import com.api.treggo.repositories.OrderRepository;
 import com.api.treggo.requests.NewOrderDTO;
+import com.api.treggo.requests.OrderDatesDTO;
 import com.api.treggo.responses.ChartsResponse;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-
+import com.api.treggo.responses.OrdersResponse;
 @Service
 public class OrderService {
 
@@ -165,6 +165,32 @@ public class OrderService {
 
 		return amount;
 
+	}
+	
+	
+	public List<OrdersResponse> getLatestOrders() {
+		List<Orders> orders = orderRepo.fetchLatestOrder();
+		return convertToResponse(orders);
+	}
+	
+	
+	public List<OrdersResponse> getFromToOrders(OrderDatesDTO dto) {
+		List<Orders> orders = orderRepo.fetchOrdersByDate(dto.getStart_date(), dto.getEnd_date());
+		return convertToResponse(orders);
+	}
+	
+	
+	private List<OrdersResponse> convertToResponse(List<Orders> orders) {
+		List<OrdersResponse> res = new ArrayList<>();
+		
+		for(Orders ord: orders) {
+			OrdersResponse temp = new OrdersResponse();
+			BeanUtils.copyProperties(ord, temp);
+			temp.setCustomerName(ord.getCustomer().getCustomer_name());
+			res.add(temp);
+		}
+		
+		return res;
 	}
 
 }
