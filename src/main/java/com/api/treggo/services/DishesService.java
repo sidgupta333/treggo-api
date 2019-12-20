@@ -153,7 +153,16 @@ public class DishesService {
 
 	// Fetch all dishes list
 	public List<Dish> getAllDishes() {
-		return dishRepo.findAll();
+		List<Dish> allDishes = dishRepo.findAll();
+		List<Dish> res = new ArrayList<>();
+		
+		for(Dish dish: allDishes) {
+			if(dish.getIs_available().equals(YesNo.Y)) {
+				res.add(dish);
+			}
+		}
+		
+		return res;
 	}
 
 	// Fetch dish by dish Id

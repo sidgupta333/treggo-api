@@ -10,12 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api.treggo.entities.Customers;
+import com.api.treggo.entities.Dish;
 import com.api.treggo.entities.Orders;
+import com.api.treggo.entities.SubOrders;
 import com.api.treggo.enums.OrderStatus;
 import com.api.treggo.repositories.CustomersRepository;
+import com.api.treggo.repositories.DishRepository;
 import com.api.treggo.repositories.OrderRepository;
+import com.api.treggo.repositories.SubOrderRepository;
 import com.api.treggo.requests.NewOrderDTO;
 import com.api.treggo.requests.OrderDatesDTO;
+import com.api.treggo.responses.BillItemResponse;
+import com.api.treggo.responses.BillResponse;
 import com.api.treggo.responses.ChartsResponse;
 import com.api.treggo.responses.OrdersResponse;
 @Service
@@ -26,6 +32,12 @@ public class OrderService {
 
 	@Autowired
 	private CustomersRepository cRepo;
+	
+	@Autowired
+	private SubOrderRepository subRepo;
+	
+	@Autowired
+	private DishRepository dishRepo;
 
 	public Orders createOrder(NewOrderDTO dto) {
 
@@ -191,6 +203,50 @@ public class OrderService {
 		}
 		
 		return res;
+	}
+	
+	
+	public BillResponse generateBill(Long order_id) {
+		BillResponse res = new BillResponse();
+		try {
+			Orders order = orderRepo.fetchByOrderId(order_id);
+			res.setName(order.getCustomer().getCustomer_name());
+			res.setOrder_id(order.getOrder_id());
+			res.setOrder_date(order.getCreated_on());
+			res.setPhone(order.getCustomer().getPhone());
+			res.setTotal_amount(order.getTotal_amount());
+			
+			List<BillItemResponse> items = new ArrayList<>();
+			List<SubOrders> subOrders = subRepo.fetchByOrderId(res.getOrder_id());
+			
+			for(SubOrders sub: subOrders) {
+				
+				String[] dishes = sub.getDishes().split("\\|");
+				String[] quantities = sub.getQuantities().split("\\|");
+				
+				for(int i = 0; i < dishes.length - 1; i++) {
+					
+					BillItemResponse temp = new BillItemResponse();
+					
+					Dish dish = dishRepo.fetchByDIshName(dishes[i].trim());
+					temp.setDish(dish.getDish_name());
+					temp.setBase_price(dish.getBase_price());
+					temp.setQuantity(Long.parseLong(quantities[i].trim()));
+					
+					items.add(temp);
+				}
+			}
+			
+			res.setItems(items);
+			
+			return res;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+			
+		}
+		
 	}
 
 }

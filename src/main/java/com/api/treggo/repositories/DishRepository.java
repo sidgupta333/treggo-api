@@ -15,6 +15,10 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
 	
 	@Query("from Dish where category_id = :category_id")
 	public List<Dish> fetchByCategory(@Param("category_id") Long category_id);
+	
+	@Query("from Dish where dish_name = :dish_name ")
+	public Dish fetchByDIshName(@Param("dish_name") String dish_name);
+	
 
 
 }
