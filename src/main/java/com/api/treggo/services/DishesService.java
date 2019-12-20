@@ -269,8 +269,15 @@ public class DishesService {
 		for (DishCategory dishCategory : categories) {
 
 			// Find dishes for each type of category:
-			List<Dish> tempDishes = this.getDishesByCategory(dishCategory.getCategory_id());
-
+			List<Dish> temp1 = this.getDishesByCategory(dishCategory.getCategory_id());
+			List<Dish> tempDishes = new ArrayList<>();
+			
+			for(Dish dish: temp1) {
+				if(dish.getIs_available().equals(YesNo.Y)) {
+					tempDishes.add(dish);
+				}
+			}
+			
 			AllDishesResponse temp = new AllDishesResponse();
 			temp.setCategory_id(dishCategory.getCategory_id());
 			temp.setCategory_name(dishCategory.getCategory_name());
