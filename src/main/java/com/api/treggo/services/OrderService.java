@@ -82,6 +82,19 @@ public class OrderService {
 			return false;
 		}
 	}
+	
+	
+	//Get all orders based on customer id:
+	public List<Orders> getOrdersByUser(String phone) {
+		try {
+			Customers cst = cRepo.fetchByPhone(phone);
+			return orderRepo.fetchByCustomerId(cst.getCustomer_id());
+		}
+		catch(Exception e) {
+			return null;
+		}
+		
+	}
 
 	// Daily view of chart:
 	// Used to calculate charts data for daily(7 days), monthly(12 months) and

@@ -79,6 +79,19 @@ public class OrdersController {
 		}
 	}
 	
+	@ApiOperation(value = "Get all orders of particular customer") 
+	@GetMapping("/byPhone/{phone}")
+	public ResponseEntity<?> getOrdersByCstId(@PathVariable("phone") String phone) {
+		 List<Orders> orders = orderService.getOrdersByUser(phone);
+		 if(orders != null) {
+			 return ResponseEntity.ok(orders);
+		 }
+		 else {
+			 return ResponseEntity.status(500).body(new GeneralResponse("failure"));
+		 }
+		
+	}
+	
 	
 	@ApiOperation(value="Get Data for drawing charts")
 	@GetMapping("/chart")
