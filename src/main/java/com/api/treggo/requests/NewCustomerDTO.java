@@ -5,7 +5,7 @@ import com.api.treggo.enums.YesNo;
 public class NewCustomerDTO {
 
 	private Long customer_id;
-	private Long table_id;
+	private String deviceId;
 	private String customer_name;
 	private String phone;
 	private YesNo validated;
@@ -15,10 +15,10 @@ public class NewCustomerDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public NewCustomerDTO(Long customer_id, Long table_id, String customer_name, String phone, YesNo validated) {
+	public NewCustomerDTO(Long customer_id, String deviceId, String customer_name, String phone, YesNo validated) {
 		super();
 		this.customer_id = customer_id;
-		this.table_id = table_id;
+		this.deviceId = deviceId;
 		this.customer_name = customer_name;
 		this.phone = phone;
 		this.validated = validated;
@@ -32,12 +32,12 @@ public class NewCustomerDTO {
 		this.customer_id = customer_id;
 	}
 
-	public Long getTable_id() {
-		return table_id;
+	public String getDeviceId() {
+		return deviceId;
 	}
 
-	public void setTable_id(Long table_id) {
-		this.table_id = table_id;
+	public void setTable_id(String  deviceId) {
+		this.deviceId = deviceId;
 	}
 
 	public String getCustomer_name() {

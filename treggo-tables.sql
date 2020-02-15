@@ -84,7 +84,7 @@ CREATE TABLE BANNER_MASTER(
 CREATE TABLE TABLE_MASTER(
   table_id serial PRIMARY KEY,
   device_id VARCHAR(50),
-  table_number VARCHAR(TABLE_MASTER10),
+  table_number VARCHAR(10),
   created_on TIMESTAMP NOT NULL
 );
 

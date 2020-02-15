@@ -30,10 +30,13 @@ public class CustomersService {
 		Customers customer = new Customers();
 		try {
 			
-			Customers cst = cRepo.fetchByPhone(dto.getPhone());
-			TableMaster table = tRepo.fetchByTableID(dto.getTable_id());
+			Customers cst = cRepo.fetchByPhone(dto.getPhone());	
+			TableMaster selectedTable = tRepo.fetchByDeviceID(dto.getDeviceId());
+			if(selectedTable == null) {
+				return null;
+			}
 			
-			List<Customers> activeCst = cRepo.fetchByStatusTableId(YesNo.Y, dto.getTable_id());
+			List<Customers> activeCst = cRepo.fetchByStatusTableId(YesNo.Y, selectedTable.getTable_id());
 			
 			// Deacticate all existing customers of current table
 			for(Customers c: activeCst) {
@@ -46,13 +49,13 @@ public class CustomersService {
 			
 			if(cst != null) {
 				cst.setValidated(YesNo.N);
-				cst.setTable(table);
+				cst.setTable(selectedTable);
 				cRepo.save(cst);
 				return cst;
 			}
 			else {
 				BeanUtils.copyProperties(dto, customer);
-				customer.setTable(table);
+				customer.setTable(selectedTable);
 				customer.setCreated_on(LocalDate.now());				
 				cRepo.save(customer);
 				return customer;
