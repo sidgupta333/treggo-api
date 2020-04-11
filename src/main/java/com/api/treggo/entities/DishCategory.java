@@ -23,17 +23,20 @@ public class DishCategory {
 	@Column(nullable = false)
 	private LocalDate created_on;
 
+	@Column(nullable = false)
+	private String tenant_code;
 
 	public DishCategory() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public DishCategory(Long category_id, String category_name, LocalDate created_on) {
+	public DishCategory(Long category_id, String category_name, LocalDate created_on, String tenant_code) {
 		super();
 		this.category_id = category_id;
 		this.category_name = category_name;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public Long getCategory_id() {
@@ -60,5 +63,12 @@ public class DishCategory {
 		this.created_on = created_on;
 	}
 
-	
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
+	}
+
 }

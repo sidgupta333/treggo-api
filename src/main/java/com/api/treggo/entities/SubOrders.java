@@ -55,13 +55,16 @@ public class SubOrders {
 	@Column(nullable = false)
 	private LocalDate created_on;
 
+	@Column(nullable = false)
+	private String tenant_code;
+
 	public SubOrders() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public SubOrders(Long sub_order_id, Customers customer, Orders order, LocalDate order_date, SubOrderStatus status,
-			String dishes, String quantities, LocalDate created_on) {
+			String dishes, String quantities, LocalDate created_on, String tenant_code) {
 		super();
 		this.sub_order_id = sub_order_id;
 		this.customer = customer;
@@ -71,6 +74,7 @@ public class SubOrders {
 		this.dishes = dishes;
 		this.quantities = quantities;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public Long getSub_order_id() {
@@ -135,6 +139,14 @@ public class SubOrders {
 
 	public void setCreated_on(LocalDate created_on) {
 		this.created_on = created_on;
+	}
+
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
 	}
 
 }

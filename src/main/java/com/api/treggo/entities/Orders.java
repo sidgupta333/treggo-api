@@ -25,24 +25,27 @@ public class Orders {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long order_id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "customer_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Customers customer;
-	
+
 	@Column(nullable = false)
 	private LocalDate order_date;
-	
+
 	@Enumerated(EnumType.STRING)
 	private OrderStatus order_status;
-	
+
 	@Column(nullable = false)
 	private Long total_amount;
-	
+
 	@Column(nullable = false)
 	private LocalDate created_on;
+
+	@Column(nullable = false)
+	private String tenant_code;
 
 	public Orders() {
 		super();
@@ -50,7 +53,7 @@ public class Orders {
 	}
 
 	public Orders(Long order_id, Customers customer, LocalDate order_date, OrderStatus order_status, Long total_amount,
-			LocalDate created_on) {
+			LocalDate created_on, String tenant_code) {
 		super();
 		this.order_id = order_id;
 		this.customer = customer;
@@ -58,6 +61,7 @@ public class Orders {
 		this.order_status = order_status;
 		this.total_amount = total_amount;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public Long getOrder_id() {
@@ -107,6 +111,13 @@ public class Orders {
 	public void setCreated_on(LocalDate created_on) {
 		this.created_on = created_on;
 	}
-	
-	
+
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
+	}
+
 }

@@ -53,13 +53,16 @@ public class Dish {
 	@Column(nullable = false)
 	private LocalDate created_on;
 
+	@Column(nullable = false)
+	private String tenant_code;
+
 	public Dish() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public Dish(Long dish_id, DishCategory category, String dish_name, Long base_price, YesNo is_available,
-			LocalDate created_on) {
+			LocalDate created_on, String tenant_code) {
 		super();
 		this.dish_id = dish_id;
 		this.category = category;
@@ -67,6 +70,7 @@ public class Dish {
 		this.base_price = base_price;
 		this.is_available = is_available;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public Long getDish_id() {
@@ -109,8 +113,6 @@ public class Dish {
 		this.is_available = is_available;
 	}
 
-	
-
 	public ImgMaster getImg() {
 		return img;
 	}
@@ -127,5 +129,12 @@ public class Dish {
 		this.created_on = created_on;
 	}
 
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
+	}
 
 }

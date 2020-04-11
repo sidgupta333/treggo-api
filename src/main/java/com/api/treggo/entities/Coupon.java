@@ -32,12 +32,15 @@ public class Coupon {
 	@Column(nullable = false)
 	private LocalDate created_on;
 
+	@Column(nullable = false)
+	private String tenant_code;
+
 	public Coupon() {
 		super();
 	}
 
 	public Coupon(Long coupon_id, String coupon_name, String desc, Long percentage_discount, Long max_discount,
-			LocalDate created_on) {
+			LocalDate created_on, String tenant_code) {
 		super();
 		this.coupon_id = coupon_id;
 		this.coupon_name = coupon_name;
@@ -45,6 +48,7 @@ public class Coupon {
 		this.percentage_discount = percentage_discount;
 		this.max_discount = max_discount;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public String getDesc() {
@@ -93,6 +97,14 @@ public class Coupon {
 
 	public void setCreated_on(LocalDate created_on) {
 		this.created_on = created_on;
+	}
+
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
 	}
 
 }

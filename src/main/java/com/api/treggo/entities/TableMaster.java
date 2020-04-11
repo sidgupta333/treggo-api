@@ -10,31 +10,35 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="TABLE_MASTER")
+@Table(name = "TABLE_MASTER")
 public class TableMaster {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long table_id;
-	
+
 	@Column(nullable = false)
 	private String device_id;
-	
+
 	@Column(nullable = false)
 	private String table_number;
-	
+
 	@Column(nullable = false)
 	private LocalDate created_on;
+
+	@Column(nullable = false)
+	private String tenant_code;
 
 	public TableMaster() {
 		super();
 	}
 
-	public TableMaster(String device_id, String table_number, LocalDate created_on) {
+	public TableMaster(String device_id, String table_number, LocalDate created_on, String tenant_code) {
 		super();
 		this.device_id = device_id;
 		this.table_number = table_number;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public Long getTable_id() {
@@ -68,5 +72,13 @@ public class TableMaster {
 	public void setCreated_on(LocalDate created_on) {
 		this.created_on = created_on;
 	}
-	
+
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
+	}
+
 }

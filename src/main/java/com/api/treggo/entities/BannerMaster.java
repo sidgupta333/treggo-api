@@ -27,33 +27,37 @@ public class BannerMaster {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long banner_id;
-	
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "img_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private ImgMaster image;
-	
+
 	@Enumerated(EnumType.STRING)
 	private YesNo is_available;
-	
+
 	@Column(nullable = false)
 	private LocalDate start_date;
 
 	@Column(nullable = false)
 	private LocalDate created_on;
-	
+
+	@Column(nullable = false)
+	private String tenant_code;
+
 	public BannerMaster() {
 		super();
 	}
 
-	public BannerMaster(ImgMaster image, YesNo is_available, LocalDate start_date,
-			LocalDate created_on) {
+	public BannerMaster(ImgMaster image, YesNo is_available, LocalDate start_date, LocalDate created_on,
+			String tenant_code) {
 		super();
 		this.image = image;
 		this.is_available = is_available;
 		this.start_date = start_date;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public Long getBanner_id() {
@@ -95,6 +99,13 @@ public class BannerMaster {
 	public void setCreated_on(LocalDate created_on) {
 		this.created_on = created_on;
 	}
-	
-	
+
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
+	}
+
 }

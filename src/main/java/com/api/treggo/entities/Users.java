@@ -18,29 +18,32 @@ public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long user_id;
-	
+
 	@Enumerated(EnumType.STRING)
 	private YesNo is_admin;
-	
-	@Column(nullable = false) 
+
+	@Column(nullable = false)
 	private String full_name;
-	
-	@Column(nullable = false) 
+
+	@Column(nullable = false)
 	private String username;
-	
-	@Column(nullable = false) 
+
+	@Column(nullable = false)
 	private String password;
-	
-	@Column(nullable = false) 
+
+	@Column(nullable = false)
 	private LocalDate created_on;
+
+	@Column(nullable = false)
+	private String tenant_code;
 
 	public Users() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Users(Long user_id, YesNo is_admin, String full_name, String username, String password,
-			LocalDate created_on) {
+	public Users(Long user_id, YesNo is_admin, String full_name, String username, String password, LocalDate created_on,
+			String tenant_code) {
 		super();
 		this.user_id = user_id;
 		this.is_admin = is_admin;
@@ -48,6 +51,7 @@ public class Users {
 		this.username = username;
 		this.password = password;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public Long getUser_id() {
@@ -98,11 +102,18 @@ public class Users {
 		this.created_on = created_on;
 	}
 
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
+	}
+
 	@Override
 	public String toString() {
 		return "Users [is_admin=" + is_admin + ", full_name=" + full_name + ", username=" + username + ", password="
 				+ password + ", created_on=" + created_on + "]";
 	}
-	
-	
+
 }

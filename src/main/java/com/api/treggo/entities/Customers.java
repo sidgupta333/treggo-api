@@ -44,13 +44,16 @@ public class Customers {
 	@Column(nullable = false)
 	private LocalDate created_on;
 
+	@Column(nullable = false)
+	private String tenant_code;
+
 	public Customers() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public Customers(Long customer_id, TableMaster table, String customer_name, String phone, YesNo validated,
-			LocalDate created_on) {
+			LocalDate created_on, String tenant_code) {
 		super();
 		this.customer_id = customer_id;
 		this.table = table;
@@ -58,6 +61,7 @@ public class Customers {
 		this.phone = phone;
 		this.validated = validated;
 		this.created_on = created_on;
+		this.tenant_code = tenant_code;
 	}
 
 	public Long getCustomer_id() {
@@ -106,6 +110,14 @@ public class Customers {
 
 	public void setCreated_on(LocalDate created_on) {
 		this.created_on = created_on;
+	}
+
+	public String getTenant_code() {
+		return tenant_code;
+	}
+
+	public void setTenant_code(String tenant_code) {
+		this.tenant_code = tenant_code;
 	}
 
 }
