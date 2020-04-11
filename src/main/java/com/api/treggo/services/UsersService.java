@@ -24,7 +24,7 @@ public class UsersService {
 	private PasswordService pwd;
 
 	// Service to create a new user in the system
-	public CreateUserResponse createNewUser(CreateUser req) {
+	public CreateUserResponse createNewUser(CreateUser req, String tenant) {
 		
 		CreateUserResponse response = new CreateUserResponse();
 		
@@ -58,6 +58,7 @@ public class UsersService {
 			}
 			userToSave.setPassword(pwd.encrypt(req.getPassword()));
 			userToSave.setUsername(req.getUsername());
+			userToSave.setTenantCode(tenant);
 			userToSave.setCreated_on(LocalDate.now());
 			
 			if(req.getUser_id() != null) {
@@ -67,7 +68,7 @@ public class UsersService {
 			try {
 
 				// Check if existing user exists:
-				Users exists = userRepo.findByUsername(req.getUsername());
+				Users exists = userRepo.findByUsernameAndTenantCode(req.getUsername(), tenant);
 				if(exists != null && req.getUser_id() == null) {
 					response.setValid(false);
 					response.setMessage("Exists");
@@ -96,8 +97,8 @@ public class UsersService {
 	
 	
 	// Get all the users list
-	public List<Users> getAllUsers() {
-		return userRepo.findAll();
+	public List<Users> getAllUsers(String tenant) {
+		return userRepo.findByTenantCode(tenant);
 	}
 	
 	
@@ -125,8 +126,8 @@ public class UsersService {
 	
 	
 	//Get selected user by Username
-	public Users getUserByUserName(String username) {
-		return userRepo.findByUsername(username);
+	public Users getUserByUserName(String username, String tenant) {
+		return userRepo.findByUsernameAndTenantCode(username, tenant);
 	}
 	
 	//Validate user login
@@ -135,7 +136,7 @@ public class UsersService {
 		LoginResponse response = new LoginResponse();
 		Users user;
 		try {
-			user = userRepo.findByUsername(req.getUsername());			
+			user = userRepo.findByUsernameAndTenantCode(req.getUsername(), req.getTenant());			
 		}
 		
 		catch(Exception e) {

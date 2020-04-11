@@ -44,20 +44,20 @@ public class BannerMaster {
 	private LocalDate created_on;
 
 	@Column(nullable = false)
-	private String tenant_code;
+	private String tenantCode;
 
 	public BannerMaster() {
 		super();
 	}
 
 	public BannerMaster(ImgMaster image, YesNo is_available, LocalDate start_date, LocalDate created_on,
-			String tenant_code) {
+			String tenantCode) {
 		super();
 		this.image = image;
 		this.is_available = is_available;
 		this.start_date = start_date;
 		this.created_on = created_on;
-		this.tenant_code = tenant_code;
+		this.tenantCode = tenantCode;
 	}
 
 	public Long getBanner_id() {
@@ -100,12 +100,12 @@ public class BannerMaster {
 		this.created_on = created_on;
 	}
 
-	public String getTenant_code() {
-		return tenant_code;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenant_code(String tenant_code) {
-		this.tenant_code = tenant_code;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 
 }

@@ -45,7 +45,7 @@ public class Orders {
 	private LocalDate created_on;
 
 	@Column(nullable = false)
-	private String tenant_code;
+	private String tenantCode;
 
 	public Orders() {
 		super();
@@ -53,7 +53,7 @@ public class Orders {
 	}
 
 	public Orders(Long order_id, Customers customer, LocalDate order_date, OrderStatus order_status, Long total_amount,
-			LocalDate created_on, String tenant_code) {
+			LocalDate created_on, String tenantCode) {
 		super();
 		this.order_id = order_id;
 		this.customer = customer;
@@ -61,7 +61,7 @@ public class Orders {
 		this.order_status = order_status;
 		this.total_amount = total_amount;
 		this.created_on = created_on;
-		this.tenant_code = tenant_code;
+		this.tenantCode = tenantCode;
 	}
 
 	public Long getOrder_id() {
@@ -112,12 +112,12 @@ public class Orders {
 		this.created_on = created_on;
 	}
 
-	public String getTenant_code() {
-		return tenant_code;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenant_code(String tenant_code) {
-		this.tenant_code = tenant_code;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 
 }

@@ -45,7 +45,7 @@ public class Customers {
 	private LocalDate created_on;
 
 	@Column(nullable = false)
-	private String tenant_code;
+	private String tenantCode;
 
 	public Customers() {
 		super();
@@ -53,7 +53,7 @@ public class Customers {
 	}
 
 	public Customers(Long customer_id, TableMaster table, String customer_name, String phone, YesNo validated,
-			LocalDate created_on, String tenant_code) {
+			LocalDate created_on, String tenantCode) {
 		super();
 		this.customer_id = customer_id;
 		this.table = table;
@@ -61,7 +61,7 @@ public class Customers {
 		this.phone = phone;
 		this.validated = validated;
 		this.created_on = created_on;
-		this.tenant_code = tenant_code;
+		this.tenantCode = tenantCode;
 	}
 
 	public Long getCustomer_id() {
@@ -112,12 +112,12 @@ public class Customers {
 		this.created_on = created_on;
 	}
 
-	public String getTenant_code() {
-		return tenant_code;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenant_code(String tenant_code) {
-		this.tenant_code = tenant_code;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 
 }

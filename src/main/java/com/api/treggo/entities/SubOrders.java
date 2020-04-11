@@ -56,7 +56,7 @@ public class SubOrders {
 	private LocalDate created_on;
 
 	@Column(nullable = false)
-	private String tenant_code;
+	private String tenantCode;
 
 	public SubOrders() {
 		super();
@@ -64,7 +64,7 @@ public class SubOrders {
 	}
 
 	public SubOrders(Long sub_order_id, Customers customer, Orders order, LocalDate order_date, SubOrderStatus status,
-			String dishes, String quantities, LocalDate created_on, String tenant_code) {
+			String dishes, String quantities, LocalDate created_on, String tenantCode) {
 		super();
 		this.sub_order_id = sub_order_id;
 		this.customer = customer;
@@ -74,7 +74,7 @@ public class SubOrders {
 		this.dishes = dishes;
 		this.quantities = quantities;
 		this.created_on = created_on;
-		this.tenant_code = tenant_code;
+		this.tenantCode = tenantCode;
 	}
 
 	public Long getSub_order_id() {
@@ -141,12 +141,12 @@ public class SubOrders {
 		this.created_on = created_on;
 	}
 
-	public String getTenant_code() {
-		return tenant_code;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenant_code(String tenant_code) {
-		this.tenant_code = tenant_code;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 
 }

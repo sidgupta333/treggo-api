@@ -18,9 +18,9 @@ public class TenantsService {
 
 	public Tenants createTenant(Tenants dto) {
 		dto.setCreated_on(LocalDate.now());
-		dto.setTenant_code(dto.getTenant_code().toUpperCase());
+		dto.setTenantCode(dto.getTenantCode().toUpperCase());
 		try {
-			Tenants tenant = repo.fetchByTenantCode(dto.getTenant_code());
+			Tenants tenant = repo.fetchByTenantCode(dto.getTenantCode());
 			if (tenant == null) {
 				return repo.save(dto);
 			} else {

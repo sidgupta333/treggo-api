@@ -27,18 +27,18 @@ public class TableMaster {
 	private LocalDate created_on;
 
 	@Column(nullable = false)
-	private String tenant_code;
+	private String tenantCode;
 
 	public TableMaster() {
 		super();
 	}
 
-	public TableMaster(String device_id, String table_number, LocalDate created_on, String tenant_code) {
+	public TableMaster(String device_id, String table_number, LocalDate created_on, String tenantCode) {
 		super();
 		this.device_id = device_id;
 		this.table_number = table_number;
 		this.created_on = created_on;
-		this.tenant_code = tenant_code;
+		this.tenantCode = tenantCode;
 	}
 
 	public Long getTable_id() {
@@ -73,12 +73,12 @@ public class TableMaster {
 		this.created_on = created_on;
 	}
 
-	public String getTenant_code() {
-		return tenant_code;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenant_code(String tenant_code) {
-		this.tenant_code = tenant_code;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 
 }

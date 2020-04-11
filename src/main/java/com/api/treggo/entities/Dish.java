@@ -54,7 +54,7 @@ public class Dish {
 	private LocalDate created_on;
 
 	@Column(nullable = false)
-	private String tenant_code;
+	private String tenantCode;
 
 	public Dish() {
 		super();
@@ -62,7 +62,7 @@ public class Dish {
 	}
 
 	public Dish(Long dish_id, DishCategory category, String dish_name, Long base_price, YesNo is_available,
-			LocalDate created_on, String tenant_code) {
+			LocalDate created_on, String tenantCode) {
 		super();
 		this.dish_id = dish_id;
 		this.category = category;
@@ -70,7 +70,7 @@ public class Dish {
 		this.base_price = base_price;
 		this.is_available = is_available;
 		this.created_on = created_on;
-		this.tenant_code = tenant_code;
+		this.tenantCode = tenantCode;
 	}
 
 	public Long getDish_id() {
@@ -129,12 +129,12 @@ public class Dish {
 		this.created_on = created_on;
 	}
 
-	public String getTenant_code() {
-		return tenant_code;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenant_code(String tenant_code) {
-		this.tenant_code = tenant_code;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 
 }

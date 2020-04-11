@@ -19,8 +19,8 @@ public class Tenants {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long tenant_id;
 
-	@Column(nullable = false)
-	private String tenant_code;
+	@Column(nullable = false, name = "tenant_code")
+	private String tenantCode;
 
 	@Column(nullable = false)
 	private String tenant_name;
@@ -48,11 +48,11 @@ public class Tenants {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Tenants(Long tenant_id, String tenant_code, String tenant_name, String phone, String address,
+	public Tenants(Long tenant_id, String tenantCode, String tenant_name, String phone, String address,
 			String sec_question, String sec_answer, YesNo is_activated, LocalDate created_on) {
 		super();
 		this.tenant_id = tenant_id;
-		this.tenant_code = tenant_code;
+		this.tenantCode = tenantCode;
 		this.tenant_name = tenant_name;
 		this.phone = phone;
 		this.address = address;
@@ -70,12 +70,12 @@ public class Tenants {
 		this.tenant_id = tenant_id;
 	}
 
-	public String getTenant_code() {
-		return tenant_code;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenant_code(String tenant_code) {
-		this.tenant_code = tenant_code;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 
 	public String getTenant_name() {

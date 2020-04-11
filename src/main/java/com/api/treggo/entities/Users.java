@@ -35,7 +35,7 @@ public class Users {
 	private LocalDate created_on;
 
 	@Column(nullable = false)
-	private String tenant_code;
+	private String tenantCode;
 
 	public Users() {
 		super();
@@ -43,7 +43,7 @@ public class Users {
 	}
 
 	public Users(Long user_id, YesNo is_admin, String full_name, String username, String password, LocalDate created_on,
-			String tenant_code) {
+			String tenantCode) {
 		super();
 		this.user_id = user_id;
 		this.is_admin = is_admin;
@@ -51,7 +51,7 @@ public class Users {
 		this.username = username;
 		this.password = password;
 		this.created_on = created_on;
-		this.tenant_code = tenant_code;
+		this.tenantCode = tenantCode;
 	}
 
 	public Long getUser_id() {
@@ -102,12 +102,12 @@ public class Users {
 		this.created_on = created_on;
 	}
 
-	public String getTenant_code() {
-		return tenant_code;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenant_code(String tenant_code) {
-		this.tenant_code = tenant_code;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 
 	@Override

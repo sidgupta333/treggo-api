@@ -10,8 +10,7 @@ public class CreateUser {
 	private String is_admin;
 	private String username;
 	private String password;
-	
-	
+
 	public CreateUser(Long user_id, String full_name, String is_admin, String username, String password) {
 		super();
 		this.user_id = user_id;
@@ -26,8 +25,6 @@ public class CreateUser {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
 	public Long getUser_id() {
 		return user_id;
 	}
