@@ -17,10 +17,11 @@ public class CouponService {
 	@Autowired
 	private CouponRepository couponRepo;
 	
-	public Coupon createCoupon(CouponDTO dto) {
+	public Coupon createCoupon(CouponDTO dto, String tenant) {
 		
 		Coupon coupon = new Coupon();
 		BeanUtils.copyProperties(dto, coupon);
+		coupon.setTenantCode(tenant);
 		
 		if(dto.getMax_discount() == null) {
 			return null;
@@ -45,15 +46,15 @@ public class CouponService {
 	
 	
 	//Get all existing coupon:
-	public List<Coupon> getAllCoupons() {
-		return couponRepo.findAll();
+	public List<Coupon> getAllCoupons(String tenant) {
+		return couponRepo.findByTenantCode(tenant);
 	}
 	
 	
-	public boolean deleteCoupon(Long couponId) {
+	public boolean deleteCoupon(Long couponId, String tenant) {
 		
 		boolean res = false;
-		Coupon coupon = couponRepo.fetchByCouponID(couponId);
+		Coupon coupon = couponRepo.fetchByCouponID(couponId, tenant);
 		
 		if(coupon != null) {
 			try {
@@ -70,11 +71,11 @@ public class CouponService {
 	
 	
 	//Calculate amount based on applied coupon
-	public Long calculateDiscountAmount(String couponName, Long total) {
+	public Long calculateDiscountAmount(String couponName, Long total, String tenant) {
 		Long amount = null;
 		
 		try {
-			Coupon coupon = couponRepo.fetchByCouponName(couponName);
+			Coupon coupon = couponRepo.fetchByCouponName(couponName, tenant);
 			
 			if(coupon != null) {
 				

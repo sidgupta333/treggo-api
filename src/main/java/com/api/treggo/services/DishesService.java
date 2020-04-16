@@ -31,7 +31,7 @@ public class DishesService {
 	private ImgMasterRepository imgRepo;
 
 	// Save a new Dish category
-	public DishCategory createCategory(String categoryName, Long category_id) {
+	public DishCategory createCategory(String categoryName, Long category_id, String tenant) {
 
 		DishCategory dto = new DishCategory();
 		dto.setCategory_name(categoryName);
@@ -39,7 +39,7 @@ public class DishesService {
 		if(category_id != 0) {
 			dto.setCategory_id(category_id);
 		}
-		
+		dto.setTenantCode(tenant);
 		dto.setCreated_on(LocalDate.now());
 
 		try {
@@ -58,15 +58,15 @@ public class DishesService {
 	}
 
 	// Delete existing dish category
-	public boolean deleteCategory(Long catId) {
+	public boolean deleteCategory(Long catId, String tenant) {
 
 
 		try {
 			//Delete al dishes of this category
-			List<Dish> dishes = dishRepo.fetchByCategory(catId);
+			List<Dish> dishes = dishRepo.fetchByCategory(catId, tenant);
 
 			for (Dish dish:dishes) {
-				this.deleteDish(dish.getDish_id());
+				this.deleteDish(dish.getDish_id(), tenant);
 			}
 
 			categoryRepo.deleteById(catId);
@@ -80,22 +80,22 @@ public class DishesService {
 	}
 
 	// Fetch all existing dish categories
-	public List<DishCategory> getAllCategories() {
-		return categoryRepo.findAll();
+	public List<DishCategory> getAllCategories(String tenant) {
+		return categoryRepo.findByTenantCode(tenant);
 	}
 
 	// Fetch dish by Dish_id
-	public DishCategory getCategory(Long id) {
-		return categoryRepo.fetchByCategoryID(id);
+	public DishCategory getCategory(Long id, String tenant) {
+		return categoryRepo.fetchByCategoryID(id, tenant);
 	}
 
 	// Update existing category
-	public DishCategory updateCategory(Long id, String name) {
+	public DishCategory updateCategory(Long id, String name, String tenant) {
 
 		DishCategory cg = new DishCategory();
 
 		try {
-			cg = categoryRepo.fetchByCategoryID(id);
+			cg = categoryRepo.fetchByCategoryID(id, tenant);
 			if (cg == null) {
 				return null;
 			} else {
@@ -114,13 +114,14 @@ public class DishesService {
 	}
 
 	// Create a new Dish:
-	public Dish createDish(NewDishDTO req) {
+	public Dish createDish(NewDishDTO req, String tenant) {
 
 		Dish dish = new Dish();
-
+		
+		
 		BeanUtils.copyProperties(req, dish);
-
-		DishCategory category = categoryRepo.fetchByCategoryID(req.getCategory_id());
+		
+		DishCategory category = categoryRepo.fetchByCategoryID(req.getCategory_id(), tenant);
 		dish.setCategory(category);
 		
 		if (req.getDish_id() == null) {
@@ -130,7 +131,7 @@ public class DishesService {
 		
 		else {
 
-			Dish dish2 = dishRepo.fetchByID(req.getDish_id());
+			Dish dish2 = dishRepo.fetchByID(req.getDish_id(), tenant);
 			if (req.getImg_id() != null) {
 				ImgMaster img = imgRepo.fetchByImgID(req.getImg_id());
 				dish.setImg(img);
@@ -139,7 +140,7 @@ public class DishesService {
 			}
 		}
 
-		
+		dish.setTenantCode(tenant);
 		dish.setCreated_on(LocalDate.now());
 
 		try {
@@ -152,8 +153,8 @@ public class DishesService {
 	}
 
 	// Fetch all dishes list
-	public List<Dish> getAllDishes() {
-		List<Dish> allDishes = dishRepo.findAll();
+	public List<Dish> getAllDishes(String tenant) {
+		List<Dish> allDishes = dishRepo.findByTenantCode(tenant);
 		List<Dish> res = new ArrayList<>();
 		
 		for(Dish dish: allDishes) {
@@ -166,16 +167,16 @@ public class DishesService {
 	}
 
 	// Fetch dish by dish Id
-	public Dish getDIshById(Long id) {
-		return dishRepo.fetchByID(id);
+	public Dish getDIshById(Long id, String tenant) {
+		return dishRepo.fetchByID(id, tenant);
 	}
 
 	// Fetch dish by category
-	public List<Dish> getDishesByCategory(Long cat_id) {
+	public List<Dish> getDishesByCategory(Long cat_id, String tenant) {
 
 		try {
-			DishCategory cat = categoryRepo.fetchByCategoryID(cat_id);
-			return dishRepo.fetchByCategory(cat.getCategory_id());
+			DishCategory cat = categoryRepo.fetchByCategoryID(cat_id, tenant);
+			return dishRepo.fetchByCategory(cat.getCategory_id(), tenant);
 		}
 
 		catch (Exception e) {
@@ -184,10 +185,10 @@ public class DishesService {
 	}
 
 	// Delete a particular dish
-	public boolean deleteDish(Long id) {
+	public boolean deleteDish(Long id, String tenant) {
 
 		try {
-			Dish dish = dishRepo.fetchByID(id);
+			Dish dish = dishRepo.fetchByID(id, tenant);
 			ImgMaster img = dish.getImg();
 			dishRepo.deleteById(id);
 
@@ -203,12 +204,12 @@ public class DishesService {
 	}
 
 	// Update base price of a dish
-	public Dish updatePriceDish(Long dishId, Long price) {
+	public Dish updatePriceDish(Long dishId, Long price, String tenant) {
 
 		Dish dish = null;
 
 		try {
-			dish = dishRepo.fetchByID(dishId);
+			dish = dishRepo.fetchByID(dishId, tenant);
 			dish.setBase_price(price);
 			dishRepo.save(dish);
 		}
@@ -221,12 +222,12 @@ public class DishesService {
 	}
 
 	// Update dish availability status:
-	public Dish updateStatusDish(Long dishId, String status) {
+	public Dish updateStatusDish(Long dishId, String status, String tenant) {
 
 		Dish dish = null;
 
 		try {
-			dish = dishRepo.fetchByID(dishId);
+			dish = dishRepo.fetchByID(dishId, tenant);
 			if (status.equalsIgnoreCase("Y")) {
 				dish.setIs_available(YesNo.Y);
 			} else {
@@ -244,11 +245,11 @@ public class DishesService {
 	}
 
 	// Update dish image of existing dish
-	public Dish updateImageDish(Long dishId, byte[] img) {
+	public Dish updateImageDish(Long dishId, byte[] img, String tenant) {
 		Dish dish = null;
 
 		try {
-			dish = dishRepo.fetchByID(dishId);
+			dish = dishRepo.fetchByID(dishId, tenant);
 			dishRepo.save(dish);
 		}
 
@@ -259,17 +260,17 @@ public class DishesService {
 	}
 
 	// Get all dishes details with their dish category:
-	public List<AllDishesResponse> allDishes() {
+	public List<AllDishesResponse> allDishes(String tenant) {
 
 		List<AllDishesResponse> output = new ArrayList<>();
 
 		// Get all the dishes categories:
-		List<DishCategory> categories = categoryRepo.findAll();
+		List<DishCategory> categories = categoryRepo.findByTenantCode(tenant);
 
 		for (DishCategory dishCategory : categories) {
 
 			// Find dishes for each type of category:
-			List<Dish> temp1 = this.getDishesByCategory(dishCategory.getCategory_id());
+			List<Dish> temp1 = this.getDishesByCategory(dishCategory.getCategory_id(), tenant);
 			List<Dish> tempDishes = new ArrayList<>();
 			
 			for(Dish dish: temp1) {

@@ -22,23 +22,24 @@ public class TableMasterService {
 	private CustomersRepository cRepo;
 	
 	
-	public TableMaster createTable(TableMaster dto) {
+	public TableMaster createTable(TableMaster dto, String tenant) {
 		
+		dto.setTenantCode(tenant);
 		dto.setCreated_on(LocalDate.now());
 		return tableRepo.save(dto);
 	}
 	
-	public List<TableMaster> getAllTables() {
-		return tableRepo.findAll();
+	public List<TableMaster> getAllTables(String tenant) {
+		return tableRepo.findByTenantCode(tenant);
 	}
 	
-	public TableMaster getTableById(Long id) {
-		return tableRepo.fetchByTableID(id);
+	public TableMaster getTableById(Long id, String tenant) {
+		return tableRepo.fetchByTableID(id, tenant);
 	}
 	
-	public boolean deleteById(Long id) {
+	public boolean deleteById(Long id, String tenant) {
 		try {
-			List<Customers> customers = cRepo.fetchByTableId(id);
+			List<Customers> customers = cRepo.fetchByTableId(id, tenant);
 			for(Customers c : customers) {
 				c.setTable(null);
 				try {
@@ -60,7 +61,7 @@ public class TableMasterService {
 	
 	
 	//Fetch table details by device id
-	public TableMaster getTableByDevice(String device_id) {
-		return tableRepo.fetchByDeviceID(device_id);
+	public TableMaster getTableByDevice(String device_id, String tenant) {
+		return tableRepo.fetchByDeviceID(device_id, tenant);
 	}
 }

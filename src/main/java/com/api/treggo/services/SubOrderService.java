@@ -32,22 +32,23 @@ public class SubOrderService {
 	@Autowired
 	private CustomersRepository cstRepo;
 
-	public SubOrders createSubOrder(NewSubOrderDTO dto) {
+	public SubOrders createSubOrder(NewSubOrderDTO dto, String tenant) {
 
 		SubOrders res = new SubOrders();
 
 		try {
 			// Fetch Order of provided order ID:
-			Orders ord = orderRepo.fetchByOrderId(dto.getOrder_id());
+			Orders ord = orderRepo.fetchByOrderId(dto.getOrder_id(), tenant);
 
 			// Fetch Customer of provided customer ID
-			Customers cst = cstRepo.fetchByCustomerId(dto.getCustomer_id());
+			Customers cst = cstRepo.fetchByCustomerId(dto.getCustomer_id(), tenant);
 
 			// Map all details to request object
 			BeanUtils.copyProperties(dto, res);
 
 			res.setCustomer(cst);
 			res.setOrder(ord);
+			res.setTenantCode(tenant);
 			res.setCreated_on(LocalDate.now());
 
 			subRepo.save(res);
@@ -59,10 +60,10 @@ public class SubOrderService {
 	}
 
 	// Fetch all SubOrders
-	public List<SubOrderResponse> getAllSubOrders() {
+	public List<SubOrderResponse> getAllSubOrders(String tenant) {
 
 		try {
-			List<SubOrders> subOrders = subRepo.findAll();
+			List<SubOrders> subOrders = subRepo.findByTenantCode(tenant);
 			List<SubOrderResponse> res = getSubResponse(subOrders);
 
 			return res;
@@ -73,10 +74,10 @@ public class SubOrderService {
 	}
 
 	// Fetch subOrders based on order id:
-	public List<SubOrderResponse> getSubOrdersByOrderID(Long order_id) {
+	public List<SubOrderResponse> getSubOrdersByOrderID(Long order_id, String tenant) {
 
 		try {
-			List<SubOrders> subOrders = subRepo.fetchByOrderId(order_id);
+			List<SubOrders> subOrders = subRepo.fetchByOrderId(order_id, tenant);
 			List<SubOrderResponse> res = getSubResponse(subOrders);
 
 			return res;
@@ -87,10 +88,10 @@ public class SubOrderService {
 	}
 
 	// Fetch subOrders based on order status:
-	public List<SubOrderResponse> getSubOrdersByOrderStatus(SubOrderStatus status) {
+	public List<SubOrderResponse> getSubOrdersByOrderStatus(SubOrderStatus status, String tenant) {
 
 		try {
-			List<SubOrders> subOrders = subRepo.fetchByStatus(status.toString());
+			List<SubOrders> subOrders = subRepo.fetchByStatus(status.toString(), tenant);
 			List<SubOrderResponse> res = getSubResponse(subOrders);
 
 			return res;
@@ -101,15 +102,15 @@ public class SubOrderService {
 	}
 
 	// Fetch subOrder by orderID:
-	public SubOrders getSubOrderById(Long id) {
-		return subRepo.fetchByID(id);
+	public SubOrders getSubOrderById(Long id, String tenant) {
+		return subRepo.fetchByID(id, tenant);
 	}
 
 	// Update sub-order status:
-	public boolean updateSubOrderStatus(Long subOrderId, SubOrderStatus status) {
+	public boolean updateSubOrderStatus(Long subOrderId, SubOrderStatus status, String tenant) {
 
 		try {
-			SubOrders sb = subRepo.fetchByID(subOrderId);
+			SubOrders sb = subRepo.fetchByID(subOrderId, tenant);
 			sb.setStatus(status);
 			subRepo.save(sb);
 
@@ -120,12 +121,12 @@ public class SubOrderService {
 	}
 
 	// Get all open suborders with the current status and tables:
-	public List<AllSubOrdersResponse> getAllSubOrdersAndCustomer() {
+	public List<AllSubOrdersResponse> getAllSubOrdersAndCustomer(String tenant) {
 
 		// Get all opened suborders
 		try {
 
-			List<SubOrders> subOrders = subRepo.fetchByNotStatus(SubOrderStatus.CLOSED);
+			List<SubOrders> subOrders = subRepo.fetchByNotStatus(SubOrderStatus.CLOSED, tenant);
 
 			List<AllSubOrdersResponse> response = new ArrayList<>();
 
@@ -140,7 +141,6 @@ public class SubOrderService {
 					tempRes.setSub_order_id(sb.getSub_order_id());
 					tempRes.setOrder_id(sb.getOrder().getOrder_id());
 					tempRes.setSub_order_status(sb.getStatus());
-
 					tempRes.setCustomer_id(sb.getCustomer().getCustomer_id());
 					tempRes.setCustomer_name(sb.getCustomer().getCustomer_name());
 					tempRes.setDishes(sb.getDishes().split("\\|"));

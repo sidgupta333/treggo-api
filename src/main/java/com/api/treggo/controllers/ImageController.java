@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,10 +67,10 @@ public class ImageController {
 
 	@ApiOperation(value = "Download image from server based on dish ID")
 	@GetMapping("/download/dish/{dishId}")
-	public ResponseEntity<?> downloadImage(@PathVariable Long dishId) {
+	public ResponseEntity<?> downloadImage(@PathVariable Long dishId, @RequestHeader("x-tenant") String tenant) {
 
 		// Get Dish from dish ID:
-		Dish dish = dishRepo.fetchByID(dishId);
+		Dish dish = dishRepo.fetchByID(dishId, tenant);
 
 		ImgMaster img = dish.getImg();
 
@@ -93,10 +94,10 @@ public class ImageController {
 
 	@ApiOperation(value = "Download image from server based on Banner ID")
 	@GetMapping("/download/banner/{bannerId}")
-	public ResponseEntity<?> downloadImageBanner(@PathVariable Long bannerId) {
+	public ResponseEntity<?> downloadImageBanner(@PathVariable Long bannerId, @RequestHeader("x-tenant") String tenant) {
 
 		// Get the banner from banner ID:
-		BannerMaster banner = bannerRepo.fetchByBannerID(bannerId);
+		BannerMaster banner = bannerRepo.fetchByBannerID(bannerId, tenant);
 		ImgMaster img = banner.getImage();
 
 		if (img == null) {

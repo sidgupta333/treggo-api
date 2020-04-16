@@ -39,16 +39,17 @@ public class OrderService {
 	@Autowired
 	private DishRepository dishRepo;
 
-	public Orders createOrder(NewOrderDTO dto) {
+	public Orders createOrder(NewOrderDTO dto, String tenant) {
 
 		Orders ord = new Orders();
 		BeanUtils.copyProperties(dto, ord);
 
 		try {
-			Customers cst = cRepo.fetchByCustomerId(dto.getCustomer_id());
+			Customers cst = cRepo.fetchByCustomerId(dto.getCustomer_id(), tenant);
 			ord.setCustomer(cst);
 			ord.setOrder_date(LocalDate.parse(dto.getOrderDate()));
 			ord.setOrder_status(OrderStatus.OPEN);
+			ord.setTenantCode(tenant);
 			ord.setCreated_on(LocalDate.now());
 			orderRepo.save(ord);
 		} catch (Exception e) {
@@ -58,18 +59,18 @@ public class OrderService {
 		return ord;
 	}
 
-	public List<Orders> getAllOrders() {
-		return orderRepo.findAll();
+	public List<Orders> getAllOrders(String tenant) {
+		return orderRepo.findByTenantCode(tenant);
 	}
 
-	public Orders getOrderById(Long id) {
-		return orderRepo.fetchByOrderId(id);
+	public Orders getOrderById(Long id, String tenant) {
+		return orderRepo.fetchByOrderId(id, tenant);
 	}
 
-	public boolean updateOrder(Long order_id, String status) {
+	public boolean updateOrder(Long order_id, String status, String tenant) {
 
 		try {
-			Orders ord = orderRepo.fetchByOrderId(order_id);
+			Orders ord = orderRepo.fetchByOrderId(order_id, tenant);
 			if (status.equalsIgnoreCase("open")) {
 				ord.setOrder_status(OrderStatus.OPEN);
 			} else {
@@ -85,10 +86,10 @@ public class OrderService {
 	
 	
 	//Get all orders based on customer id:
-	public List<Orders> getOrdersByUser(String phone) {
+	public List<Orders> getOrdersByUser(String phone, String tenant) {
 		try {
-			Customers cst = cRepo.fetchByPhone(phone);
-			return orderRepo.fetchByCustomerId(cst.getCustomer_id());
+			Customers cst = cRepo.fetchByPhone(phone, tenant);
+			return orderRepo.fetchByCustomerId(cst.getCustomer_id(), tenant);
 		}
 		catch(Exception e) {
 			return null;
@@ -99,19 +100,19 @@ public class OrderService {
 	// Daily view of chart:
 	// Used to calculate charts data for daily(7 days), monthly(12 months) and
 	// yearly(10 years)
-	public List<ChartsResponse> getChartsData() {
+	public List<ChartsResponse> getChartsData(String tenant) {
 
 		List<ChartsResponse> response = new ArrayList<>();
 
-		response.add(getDaysResponse());
-		response.add(getMonthsResponse());
-		response.add(getYearsResponse());
+		response.add(getDaysResponse(tenant));
+		response.add(getMonthsResponse(tenant));
+		response.add(getYearsResponse(tenant));
 
 		return response;
 	}
 
 	// Calculate daily chart data:
-	private ChartsResponse getDaysResponse() {
+	private ChartsResponse getDaysResponse(String tenant) {
 
 		LocalDate today = LocalDate.now();
 		ChartsResponse days = new ChartsResponse();
@@ -121,11 +122,11 @@ public class OrderService {
 		Long[] amounts = new Long[7];
 
 		temp[6] = today;
-		amounts[6] = calculateAmountInDate(today, today);
+		amounts[6] = calculateAmountInDate(today, today, tenant);
 
 		for (int i = 6; i > 0; i--) {
 			temp[6 - i] = today.minus(i, ChronoUnit.DAYS);
-			amounts[6 - i] = calculateAmountInDate(temp[6 - i], temp[6 - i]);
+			amounts[6 - i] = calculateAmountInDate(temp[6 - i], temp[6 - i], tenant);
 		}
 
 		days.setLabels(temp);
@@ -134,7 +135,7 @@ public class OrderService {
 	}
 
 	// Calculate monthly chart data:
-	private ChartsResponse getMonthsResponse() {
+	private ChartsResponse getMonthsResponse(String tenant) {
 
 		LocalDate today = LocalDate.now();
 		ChartsResponse days = new ChartsResponse();
@@ -146,7 +147,7 @@ public class OrderService {
 		LocalDate prevDate = today.minus(12, ChronoUnit.MONTHS);
 		for (int i = 12; i > 0; i--) {
 			temp[12 - i] = today.minus(i - 1, ChronoUnit.MONTHS);
-			amounts[12 - i] = calculateAmountInDate(prevDate, temp[12 - i]);
+			amounts[12 - i] = calculateAmountInDate(prevDate, temp[12 - i], tenant);
 			prevDate = temp[12 - i];
 		}
 
@@ -157,7 +158,7 @@ public class OrderService {
 	
 	
 	// Calculate yearly chart data:
-	private ChartsResponse getYearsResponse() {
+	private ChartsResponse getYearsResponse(String tenant) {
 
 		LocalDate today = LocalDate.now();
 		ChartsResponse days = new ChartsResponse();
@@ -169,7 +170,7 @@ public class OrderService {
 		LocalDate prevDate = today.minus(10, ChronoUnit.YEARS);
 		for (int i = 10; i > 0; i--) {
 			temp[10 - i] = today.minus(i - 1, ChronoUnit.YEARS);
-			amounts[10 - i] = calculateAmountInDate(prevDate, temp[10 - i]);
+			amounts[10 - i] = calculateAmountInDate(prevDate, temp[10 - i], tenant);
 			prevDate = temp[10 - i];
 		}
 
@@ -180,10 +181,10 @@ public class OrderService {
 	
 	
 
-	private Long calculateAmountInDate(LocalDate start_date, LocalDate end_date) {
+	private Long calculateAmountInDate(LocalDate start_date, LocalDate end_date, String tenant) {
 		Long amount = (long) 0;
 
-		List<Orders> orders = orderRepo.fetchOrdersByDate(start_date, end_date);
+		List<Orders> orders = orderRepo.fetchOrdersByDate(start_date, end_date, tenant);
 		for (Orders ord : orders) {
 			amount = amount + ord.getTotal_amount();
 		}
@@ -193,14 +194,14 @@ public class OrderService {
 	}
 	
 	
-	public List<OrdersResponse> getLatestOrders() {
-		List<Orders> orders = orderRepo.fetchLatestOrder();
+	public List<OrdersResponse> getLatestOrders(String tenant) {
+		List<Orders> orders = orderRepo.fetchLatestOrder(tenant);
 		return convertToResponse(orders);
 	}
 	
 	
-	public List<OrdersResponse> getFromToOrders(OrderDatesDTO dto) {
-		List<Orders> orders = orderRepo.fetchOrdersByDate(dto.getStart_date(), dto.getEnd_date());
+	public List<OrdersResponse> getFromToOrders(OrderDatesDTO dto, String tenant) {
+		List<Orders> orders = orderRepo.fetchOrdersByDate(dto.getStart_date(), dto.getEnd_date(), tenant);
 		return convertToResponse(orders);
 	}
 	
@@ -219,10 +220,10 @@ public class OrderService {
 	}
 	
 	
-	public BillResponse generateBill(Long order_id) {
+	public BillResponse generateBill(Long order_id, String tenant) {
 		BillResponse res = new BillResponse();
 		try {
-			Orders order = orderRepo.fetchByOrderId(order_id);
+			Orders order = orderRepo.fetchByOrderId(order_id, tenant);
 			res.setName(order.getCustomer().getCustomer_name());
 			res.setOrder_id(order.getOrder_id());
 			res.setOrder_date(order.getCreated_on());
@@ -230,7 +231,7 @@ public class OrderService {
 			res.setTotal_amount(order.getTotal_amount());
 			
 			List<BillItemResponse> items = new ArrayList<>();
-			List<SubOrders> subOrders = subRepo.fetchByOrderId(res.getOrder_id());
+			List<SubOrders> subOrders = subRepo.fetchByOrderId(res.getOrder_id(), tenant);
 			
 			for(SubOrders sub: subOrders) {
 				
@@ -241,7 +242,7 @@ public class OrderService {
 					
 					BillItemResponse temp = new BillItemResponse();
 					
-					Dish dish = dishRepo.fetchByDIshName(dishes[i].trim());
+					Dish dish = dishRepo.fetchByDIshName(dishes[i].trim(), tenant);
 					temp.setDish(dish.getDish_name());
 					temp.setBase_price(dish.getBase_price());
 					temp.setQuantity(Long.parseLong(quantities[i].trim()));

@@ -11,15 +11,17 @@ import com.api.treggo.enums.YesNo;
 
 public interface CustomersRepository extends JpaRepository<Customers, Long> {
 
-	@Query("from Customers where customer_id = :customer_id")
-	public Customers fetchByCustomerId(@Param("customer_id") Long id);
+	public List<Customers> findByTenantCode(String tenant);
 	
-	@Query("from Customers where phone = :phone")
-	public Customers fetchByPhone(@Param("phone") String phone);
+	@Query("from Customers where customer_id = :customer_id and tenantCode = :tenant")
+	public Customers fetchByCustomerId(@Param("customer_id") Long id, @Param("tenant") String tenant);
 	
-	@Query("from Customers where table_id = :table_id")
-	public List<Customers> fetchByTableId(@Param("table_id") Long table_id);
+	@Query("from Customers where phone = :phone and tenantCode = :tenant")
+	public Customers fetchByPhone(@Param("phone") String phone, @Param("tenant") String tenant);
 	
-	@Query("from Customers where validated = :status and table_id = :table_id")
-	public List<Customers> fetchByStatusTableId(@Param("status") YesNo status, @Param("table_id") Long table_id);
+	@Query("from Customers where table_id = :table_id and tenantCode = :tenant")
+	public List<Customers> fetchByTableId(@Param("table_id") Long table_id, @Param("tenant") String tenant);
+	
+	@Query("from Customers where validated = :status and table_id = :table_id and tenantCode = :tenant")
+	public List<Customers> fetchByStatusTableId(@Param("status") YesNo status, @Param("table_id") Long table_id, @Param("tenant") String tenant);
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,9 +18,7 @@ import com.api.treggo.requests.NewOrderDTO;
 import com.api.treggo.requests.OrderDatesDTO;
 import com.api.treggo.requests.UpdateOrderDTO;
 import com.api.treggo.responses.BillResponse;
-import com.api.treggo.responses.ChartsResponse;
 import com.api.treggo.responses.GeneralResponse;
-import com.api.treggo.responses.OrdersResponse;
 import com.api.treggo.services.OrderService;
 
 import io.swagger.annotations.ApiOperation;
@@ -36,9 +35,13 @@ public class OrdersController {
 	
 	@ApiOperation(value="Creates a new fresh order")
 	@PostMapping("/create")
-	public ResponseEntity<?> createOrder(@RequestBody NewOrderDTO dto) {
+	public ResponseEntity<?> createOrder(@RequestBody NewOrderDTO dto, @RequestHeader("x-tenant") String tenant) {
+
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
 		
-		Orders ord = orderService.createOrder(dto);
+		Orders ord = orderService.createOrder(dto, tenant);
 		
 		if(ord == null) {
 			return ResponseEntity.status(500).body(new GeneralResponse("failed"));
@@ -51,25 +54,35 @@ public class OrdersController {
 	
 	@ApiOperation(value="Get all the available orders")
 	@GetMapping("/getAll")
-	public List<Orders> getAllOrders() {
+	public ResponseEntity<?> getAllOrders(@RequestHeader("x-tenant") String tenant) {
 		
-		return orderService.getAllOrders();
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		return ResponseEntity.ok(orderService.getAllOrders(tenant));
 	}
 	
 	@ApiOperation(value="Get single order by ID")
 	@GetMapping("/getOne/{id}")
-	public Orders getOne(@PathVariable("id") Long id) {
+	public ResponseEntity<?> getOne(@PathVariable("id") Long id, @RequestHeader("x-tenant") String tenant) {
 		
-		return orderService.getOrderById(id);
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		return ResponseEntity.ok(orderService.getOrderById(id, tenant));
 	}
 	
 	
 	
 	@ApiOperation(value="Update the status of existing order")
 	@PostMapping("/updateStatus")
-	public ResponseEntity<?> updateStatus(@RequestBody UpdateOrderDTO dto) {
+	public ResponseEntity<?> updateStatus(@RequestBody UpdateOrderDTO dto, @RequestHeader("x-tenant") String tenant) {
 		
-		boolean res = orderService.updateOrder(dto.getOrder_id(), dto.getStatus());
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		boolean res = orderService.updateOrder(dto.getOrder_id(), dto.getStatus(), tenant);
 		
 		if(res) {
 			return ResponseEntity.ok(new GeneralResponse("success"));
@@ -81,8 +94,13 @@ public class OrdersController {
 	
 	@ApiOperation(value = "Get all orders of particular customer") 
 	@GetMapping("/byPhone/{phone}")
-	public ResponseEntity<?> getOrdersByCstId(@PathVariable("phone") String phone) {
-		 List<Orders> orders = orderService.getOrdersByUser(phone);
+	public ResponseEntity<?> getOrdersByCstId(@PathVariable("phone") String phone, @RequestHeader("x-tenant") String tenant) {
+		 
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		List<Orders> orders = orderService.getOrdersByUser(phone, tenant);
 		 if(orders != null) {
 			 return ResponseEntity.ok(orders);
 		 }
@@ -95,30 +113,46 @@ public class OrdersController {
 	
 	@ApiOperation(value="Get Data for drawing charts")
 	@GetMapping("/chart")
-	public List<ChartsResponse> getChartData() {
-		return orderService.getChartsData();
+	public ResponseEntity<?> getChartData(@RequestHeader("x-tenant") String tenant) {
+		
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		return ResponseEntity.ok(orderService.getChartsData(tenant));
 	}
 	
 	
 	@ApiOperation(value="Get latest closed orders")
 	@GetMapping("/latest")
-	public List<OrdersResponse> getLatest() {
-		return orderService.getLatestOrders();
+	public ResponseEntity<?> getLatest(@RequestHeader("x-tenant") String tenant) {
+		
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		return ResponseEntity.ok(orderService.getLatestOrders(tenant));
 	}
 	
 	
 	@ApiOperation(value="Get Orders between date range")
 	@PostMapping("/ordersByDate")
-	public List<OrdersResponse> getOrdersByDate(@RequestBody OrderDatesDTO dto) {
-		return orderService.getFromToOrders(dto);
+	public ResponseEntity<?> getOrdersByDate(@RequestBody OrderDatesDTO dto, @RequestHeader("x-tenant") String tenant) {
+		
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		return ResponseEntity.ok(orderService.getFromToOrders(dto, tenant));
 	}
 	
 	
 	@ApiOperation(value = "Get items list for billing by order id")
 	@GetMapping("/bill/{order_id}")
-	public ResponseEntity<?> generateBill(@PathVariable Long order_id) {
+	public ResponseEntity<?> generateBill(@PathVariable Long order_id, @RequestHeader("x-tenant") String tenant) {
 		
-		BillResponse res = orderService.generateBill(order_id);
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		BillResponse res = orderService.generateBill(order_id, tenant);
 		
 		if(res == null) {
 			return ResponseEntity.status(500).body(new GeneralResponse("failure"));

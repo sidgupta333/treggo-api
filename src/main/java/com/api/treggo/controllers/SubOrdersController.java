@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,6 @@ import com.api.treggo.requests.NewSubOrderDTO;
 import com.api.treggo.requests.UpdateSubOrderStatus;
 import com.api.treggo.responses.AllSubOrdersResponse;
 import com.api.treggo.responses.GeneralResponse;
-import com.api.treggo.responses.SubOrderResponse;
 import com.api.treggo.services.SubOrderService;
 
 import io.swagger.annotations.ApiOperation;
@@ -33,9 +33,13 @@ public class SubOrdersController {
 
 	@ApiOperation(value = "Creates a new fresh sub-order")
 	@PostMapping("/create")
-	public ResponseEntity<?> createSubOrder(@RequestBody NewSubOrderDTO dto) {
+	public ResponseEntity<?> createSubOrder(@RequestBody NewSubOrderDTO dto, @RequestHeader("x-tenant") String tenant) {
 
-		SubOrders subOrder = subService.createSubOrder(dto);
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		SubOrders subOrder = subService.createSubOrder(dto, tenant);
 
 		if (subOrder == null) {
 			return ResponseEntity.status(500).body(new GeneralResponse("failed"));
@@ -47,29 +51,48 @@ public class SubOrdersController {
 	
 	@ApiOperation(value="Get all the available sub-orders")
 	@GetMapping("/getAll")
-	public List<SubOrderResponse> getAllSubOrders() {
-		return subService.getAllSubOrders();
+	public ResponseEntity<?> getAllSubOrders(@RequestHeader("x-tenant") String tenant) {
+		
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		return ResponseEntity.ok(subService.getAllSubOrders(tenant));
 	}
 	
 	
 	@ApiOperation(value="Get all the available sub-orders based on order id")
 	@GetMapping("/getAll/{orderId}")
-	public List<SubOrderResponse> getAllSubOrdersBYOrderId(@PathVariable Long orderId) {
-		return subService.getSubOrdersByOrderID(orderId);
+	public ResponseEntity<?> getAllSubOrdersBYOrderId(@PathVariable Long orderId, @RequestHeader("x-tenant") String tenant) {
+		
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		return ResponseEntity.ok(subService.getSubOrdersByOrderID(orderId, tenant));
 	}
 	
 	
 	@ApiOperation(value="Get all the available sub-orders based on order status")
 	@GetMapping("/getAll/{status}")
-	public List<SubOrderResponse> getAllSubOrdersByOrderStatus(@PathVariable SubOrderStatus status) {
-		return subService.getSubOrdersByOrderStatus(status);
+	public ResponseEntity<?> getAllSubOrdersByOrderStatus(@PathVariable SubOrderStatus status, @RequestHeader("x-tenant") String tenant) {
+		
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		return ResponseEntity.ok(subService.getSubOrdersByOrderStatus(status, tenant));
 	}
 	
 	@ApiOperation(value="Get all SubOrder based on suborder ID")
 	@GetMapping("/getOne/{id}")
-	public ResponseEntity<?> getSubOrderById(@PathVariable Long id) {
+	public ResponseEntity<?> getSubOrderById(@PathVariable Long id, @RequestHeader("x-tenant") String tenant) {
 		
-		SubOrders res = subService.getSubOrderById(id);
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		SubOrders res = subService.getSubOrderById(id, tenant);
 		if(res == null) {
 			return ResponseEntity.status(500).body(new GeneralResponse("failed"));
 		}
@@ -82,9 +105,13 @@ public class SubOrdersController {
 	
 	@ApiOperation(value="Update the status of existing sub-order")
 	@PostMapping("/updateStatus")
-	public ResponseEntity<?> updateStatus(@RequestBody UpdateSubOrderStatus dto) {
+	public ResponseEntity<?> updateStatus(@RequestBody UpdateSubOrderStatus dto, @RequestHeader("x-tenant") String tenant) {
 		
-		boolean res = subService.updateSubOrderStatus(dto.getSubOrderId(), dto.getStatus());
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		boolean res = subService.updateSubOrderStatus(dto.getSubOrderId(), dto.getStatus(), tenant);
 		
 		if(res) {
 			return ResponseEntity.ok(new GeneralResponse("success"));
@@ -97,9 +124,13 @@ public class SubOrdersController {
 	
 	@ApiOperation(value="Update the status of existing sub-order")
 	@GetMapping("/drillDown")
-	public ResponseEntity<?> getDrillDown() {
+	public ResponseEntity<?> getDrillDown(@RequestHeader("x-tenant") String tenant) {
 		
-		List<AllSubOrdersResponse> res = subService.getAllSubOrdersAndCustomer();
+		if (tenant == null) {
+			return ResponseEntity.status(401).body(new GeneralResponse("Unauthorized"));
+		}
+		
+		List<AllSubOrdersResponse> res = subService.getAllSubOrdersAndCustomer(tenant);
 		
 		if(res == null) {
 			return ResponseEntity.status(500).body(new GeneralResponse("failure"));
