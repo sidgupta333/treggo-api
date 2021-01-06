@@ -25,7 +25,7 @@ public class ImgMaster {
 	private String file_extension;
 	
 	
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String img_data;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "img")

@@ -38,7 +38,7 @@ public class CustomersService {
 
 			List<Customers> activeCst = cRepo.fetchByStatusTableId(YesNo.Y, selectedTable.getTable_id(), tenant);
 
-			// Deacticate all existing customers of current table
+			// Deactivate all existing customers of current table
 			for (Customers c : activeCst) {
 
 				if (cRepo.fetchByPhone(c.getPhone(), tenant).getValidated() == YesNo.Y) {
@@ -55,6 +55,7 @@ public class CustomersService {
 			} else {
 				BeanUtils.copyProperties(dto, customer);
 				customer.setTable(selectedTable);
+				customer.setTenantCode(tenant);
 				customer.setCreated_on(LocalDate.now());
 				cRepo.save(customer);
 				return customer;

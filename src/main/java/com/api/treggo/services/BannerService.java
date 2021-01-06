@@ -22,6 +22,8 @@ public class BannerService {
 
 	@Autowired
 	ImgMasterRepository imgRepo;
+	
+	
 
 	public BannerMaster createBanner(NewBannerDTO req, String tenant) {
 
